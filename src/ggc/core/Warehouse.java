@@ -3,6 +3,7 @@ package ggc.core;
 // FIXME import classes (cannot import from pt.tecnico or ggc.app)
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.io.IOException;
 import ggc.core.exception.BadEntryException;
 
@@ -17,6 +18,13 @@ public class Warehouse implements Serializable {
   // FIXME define attributes
   // FIXME define contructor(s)
   // FIXME define methods
+
+  private Date _date;
+  private int _nextTransactionId;
+  private HashSet<Product> _products;
+  private HashSet<Partner> _partners;
+  private HashSet<Transaction> _transactions;
+
 
   /**
    * @param txtfile filename to be loaded.
