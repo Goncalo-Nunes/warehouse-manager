@@ -3,5 +3,10 @@ package ggc.core;
 
 public class Component {
     private int _quantity;
-    //private ArrayList<Product>_products;
+    private Product _product;
+
+    public Component(int quantity, Product product) {
+        _quantity = quantity;
+        _product = product;
+    }
 }

@@ -13,9 +13,13 @@ public abstract class Product {
     }
 
     public String toString() {
-
+        
     }
 
     abstract void checkQuantity(int quantity, Partner partner);
+
+    public void addBatch(double price, int quantity, Partner partner) {
+        _batches.add(new Batch(price, quantity, partner, this));
+    }
     
 }

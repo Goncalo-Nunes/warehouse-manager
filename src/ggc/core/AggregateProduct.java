@@ -8,6 +8,10 @@ public class AggregateProduct extends Product{
         super(id);
     }
 
+    public void setRecipe(Recipe recipe) {
+        _recipe = recipe;
+    }
+
     void checkQuantity(int quantity, Partner partner) {
 
     }

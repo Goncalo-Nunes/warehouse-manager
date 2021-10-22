@@ -3,7 +3,8 @@ package ggc.core;
 // FIXME import classes (cannot import from pt.tecnico or ggc.app)
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.IOException;
 import ggc.core.exception.BadEntryException;
 
@@ -12,27 +13,68 @@ import ggc.core.exception.BadEntryException;
  */
 public class Warehouse implements Serializable {
 
-  /** Serial number for serialization. */
-  private static final long serialVersionUID = 202109192006L;
+    /** Serial number for serialization. */
+    private static final long serialVersionUID = 202109192006L;
 
-  // FIXME define attributes
-  // FIXME define contructor(s)
-  // FIXME define methods
+    // FIXME define attributes
+    // FIXME define contructor(s)
+    // FIXME define methods
 
-  private Date _date;
-  private int _nextTransactionId;
-  private HashSet<Product> _products;
-  private HashSet<Partner> _partners;
-  private HashSet<Transaction> _transactions;
+    private Date _date;
+    private int _nextTransactionId;
+    private HashMap<String, Product> _products;
+    private HashMap<String, Partner> _partners;
+    private HashMap<Integer, Transaction> _transactions;
 
 
-  /**
-   * @param txtfile filename to be loaded.
-   * @throws IOException
-   * @throws BadEntryException
-   */
-  void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */ {
+
+    public HashMap<String, Product> getProducts() {
+        return _products;
+    }
+
+    public HashMap<String, Partner> getPartners() {
+        return _partners;
+    }
+
+    public HashMap<Integer, Transaction> getTransactions() {
+        return _transactions;
+    }
+
+    /**
+     * @param txtfile filename to be loaded.
+     * @throws IOException
+     * @throws BadEntryException
+     */
+    void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */ {
     //FIXME implement method
-  }
+    }
+
+    public void registerPartner(String id, String name, String address) { // throws
+
+    }
+
+    public void registerSimpleProduct(String productId) {
+
+    }
+
+    public void registerAggregateProduct(String productId, ArrayList<Product> products, ArrayList<Integer> quantities, double alpha) {
+        ArrayList<Component> components = new ArrayList<>();
+        AggregateProduct aggregateProduct = new AggregateProduct(productId);
+
+        for(int i = 0; i < products.size(); i++) {
+            components.add(new Component(quantities.get(i), products.get(i)));
+        }
+
+        aggregateProduct.setRecipe(new Recipe(aggregateProduct, components, alpha));
+        _products.put(productId, aggregateProduct);
+    }
+
+    public Product getProductWithId(String id) {
+        return _products.get(id);
+    }
+
+    public Partner getPartnerWithId(String id) {
+        return _partners.get(id);
+    }
 
 }
