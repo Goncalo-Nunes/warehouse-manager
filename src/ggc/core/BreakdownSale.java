@@ -10,7 +10,9 @@ public class BreakdownSale extends Sale {
         super(product, quantity, partner);
     }
 
+    /*
     public String toString() {
 
     }
+    */
 }

@@ -14,6 +14,12 @@ public class Recipe {
     }
 
     public String toString() {
+        String ret = "";
 
+        for(Component component: _components) {
+            ret += component.toString() + "#";
+        }
+
+        return ret.substring(0, ret.length()-1);
     }
 }

@@ -14,9 +14,11 @@ public abstract class Transaction {
         _partner = partner;
     }
 
+    /*
     public boolean isPaid() {
 
     }
+    */
 
     public Date getPaymentDate() {
         return _paymentDate;

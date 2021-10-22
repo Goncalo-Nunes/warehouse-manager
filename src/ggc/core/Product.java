@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 public abstract class Product {
     private double _maxPrice;
+    private int _totalStock;
     private String _id;
     private LinkedList<Batch> _batches;
 
@@ -12,8 +13,17 @@ public abstract class Product {
         _id = id;
     }
 
+
+    public String getId() {
+        return _id;
+    }
+
+    public double getPrice() {
+        return _maxPrice;
+    }
+
     public String toString() {
-        
+        return "" + _id + "|" + _maxPrice + "|" + _totalStock;
     }
 
     abstract void checkQuantity(int quantity, Partner partner);

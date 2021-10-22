@@ -9,4 +9,8 @@ public class Component {
         _quantity = quantity;
         _product = product;
     }
+
+    public String toString() {
+        return _product.getId() + ":" + _quantity;
+    }
 }

@@ -9,7 +9,9 @@ public class SaleByCredit extends Sale {
         _deadline = new Date(deadline);
     }
 
+    /*
     public String toString() {
 
     }
+    */
 }

@@ -46,15 +46,17 @@ public class Warehouse implements Serializable {
      * @throws BadEntryException
      */
     void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */ {
-    //FIXME implement method
+        //FIXME implement method
+        Parser parser = new Parser(this);
+        parser.parseFile(txtfile);
     }
 
     public void registerPartner(String id, String name, String address) { // throws
-
+        _partners.put(id, new Partner(id, name, address));
     }
 
     public void registerSimpleProduct(String productId) {
-
+        _products.put(productId, new SimpleProduct(productId));
     }
 
     public void registerAggregateProduct(String productId, ArrayList<Product> products, ArrayList<Integer> quantities, double alpha) {
