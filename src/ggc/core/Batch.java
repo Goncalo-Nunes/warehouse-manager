@@ -17,7 +17,9 @@ public class Batch {
         return _product.getId() + "|" + _partner.getId() + "|" + _price + "|" + _quantity;
     }
 
+    /*
     Batch makeCopy() {
 
     }
+    */
 }

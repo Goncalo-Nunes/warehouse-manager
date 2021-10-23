@@ -6,7 +6,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.IOException;
+
 import ggc.core.exception.BadEntryException;
+import ggc.core.exception.InvalidDaysException;
 
 /**
  * Class Warehouse implements a warehouse.
@@ -26,7 +28,22 @@ public class Warehouse implements Serializable {
     private HashMap<String, Partner> _partners;
     private HashMap<Integer, Transaction> _transactions;
 
+    public Warehouse() {
+        _date = new Date();
+        _nextTransactionId = 0;
+    }
 
+    public Date getDate() {
+        return _date;
+    }
+
+    public void advanceDate(int offset) throws InvalidDaysException {
+        if (offset <= 0) {
+            throw new InvalidDaysException(offset);
+        }
+
+        _date.add(offset);
+    }
 
     public HashMap<String, Product> getProducts() {
         return _products;

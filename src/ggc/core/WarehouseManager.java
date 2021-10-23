@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.ImportFileException;
+import ggc.core.exception.InvalidDaysException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.MissingFileAssociationException;
 
@@ -62,6 +63,15 @@ public class WarehouseManager {
     } catch (IOException | BadEntryException /* FIXME maybe other exceptions */ e) {
       throw new ImportFileException(textfile, e);
     }
+  }
+
+  public Date getDate() {
+    return _warehouse.getDate();
+  }
+
+  public void advanceDate(int offset) throws InvalidDaysException {
+    _warehouse.advanceDate(offset);
+    
   }
 
 }

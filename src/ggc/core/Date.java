@@ -28,4 +28,8 @@ public class Date {
     public int difference(Date date) {
         return _days - date.getDays();
     }
+
+    public String toString() {
+        return "" + _days;
+    }
 }
