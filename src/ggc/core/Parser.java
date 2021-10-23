@@ -8,6 +8,8 @@ import java.io.BufferedReader;
 import java.io.Reader;
 
 import ggc.core.exception.BadEntryException;
+import ggc.core.exception.DuplicatePartnerException;
+import ggc.core.exception.DuplicateProductException;
 
 public class Parser {
 
@@ -18,7 +20,7 @@ public class Parser {
     _store = w;
   }
 
-  void parseFile(String filename) throws IOException, BadEntryException {
+  void parseFile(String filename) throws IOException, BadEntryException, DuplicatePartnerException, DuplicateProductException {
     try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
       String line;
 
@@ -27,7 +29,7 @@ public class Parser {
     }
   }
 
-  private void parseLine(String line) throws BadEntryException, BadEntryException {
+  private void parseLine(String line) throws BadEntryException, BadEntryException, DuplicatePartnerException, DuplicateProductException {
     String[] components = line.split("\\|");
 
     switch (components[0]) {
@@ -48,7 +50,7 @@ public class Parser {
   }
 
   //PARTNER|id|nome|endereço
-  private void parsePartner(String[] components, String line) throws BadEntryException {
+  private void parsePartner(String[] components, String line) throws BadEntryException, DuplicatePartnerException {
     if (components.length != 4)
       throw new BadEntryException("Invalid partner with wrong number of fields (4): " + line);
     
@@ -62,7 +64,7 @@ public class Parser {
   }
 
   //BATCH_S|idProduto|idParceiro|prec ̧o|stock-actual
-  private void parseSimpleProduct(String[] components, String line) throws BadEntryException {
+  private void parseSimpleProduct(String[] components, String line) throws BadEntryException, DuplicateProductException {
     if (components.length != 5)
       throw new BadEntryException("Invalid number of fields (4) in simple batch description: " + line);
     
@@ -74,7 +76,7 @@ public class Parser {
     // add code here to do the following
     //if (!_store does not have product with idProduct)
     //  register simple product with idProduct in _store;
-    if(!_store.getProducts().containsKey(idProduct)) {
+    if(!_store.productExists(idProduct)) {
         _store.registerSimpleProduct(idProduct);
     }
     
@@ -91,7 +93,7 @@ public class Parser {
  
     
   //BATCH_M|idProduto|idParceiro|prec ̧o|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
-  private void parseAggregateProduct(String[] components, String line) throws BadEntryException {
+  private void parseAggregateProduct(String[] components, String line) throws BadEntryException, NumberFormatException, DuplicateProductException {
     if (components.length != 7)
       throw new BadEntryException("Invalid number of fields (7) in aggregate batch description: " + line);
     
@@ -99,7 +101,7 @@ public class Parser {
     String idPartner = components[2];
 
     // add code here to do the following
-    if (!_store.getProducts().containsKey(idProduct)) {
+    if (!_store.productExists(idProduct)) {
       ArrayList<Product> products = new ArrayList<>();
       ArrayList<Integer> quantities = new ArrayList<>();
       

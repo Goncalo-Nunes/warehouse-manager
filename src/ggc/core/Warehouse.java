@@ -7,8 +7,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.IOException;
 
+
 import ggc.core.exception.BadEntryException;
+import ggc.core.exception.DuplicatePartnerException;
+import ggc.core.exception.DuplicateProductException;
 import ggc.core.exception.InvalidDaysException;
+
 
 /**
  * Class Warehouse implements a warehouse.
@@ -62,21 +66,32 @@ public class Warehouse implements Serializable {
      * @throws IOException
      * @throws BadEntryException
      */
-    void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */ {
-        //FIXME implement method
+    void importFile(String txtfile) throws IOException, BadEntryException, DuplicatePartnerException, DuplicateProductException {
         Parser parser = new Parser(this);
         parser.parseFile(txtfile);
     }
 
-    public void registerPartner(String id, String name, String address) { // throws
+    public void registerPartner(String id, String name, String address) throws DuplicatePartnerException {
+        if(_partners.containsKey(id)) {
+            throw new DuplicatePartnerException(id);
+        }
+
         _partners.put(id, new Partner(id, name, address));
     }
 
-    public void registerSimpleProduct(String productId) {
+    public void registerSimpleProduct(String productId) throws DuplicateProductException {
+        if(_products.containsKey(productId)) {
+            throw new DuplicateProductException(productId);
+        }
+
         _products.put(productId, new SimpleProduct(productId));
     }
 
-    public void registerAggregateProduct(String productId, ArrayList<Product> products, ArrayList<Integer> quantities, double alpha) {
+    public void registerAggregateProduct(String productId, ArrayList<Product> products, ArrayList<Integer> quantities, double alpha) throws DuplicateProductException{
+        if(_products.containsKey(productId)) {
+            throw new DuplicateProductException(productId);
+        }
+
         ArrayList<Component> components = new ArrayList<>();
         AggregateProduct aggregateProduct = new AggregateProduct(productId);
 
@@ -94,6 +109,10 @@ public class Warehouse implements Serializable {
 
     public Partner getPartnerWithId(String id) {
         return _partners.get(id);
+    }
+
+    public boolean productExists(String id) {
+        return _products.containsKey(id);
     }
 
 }

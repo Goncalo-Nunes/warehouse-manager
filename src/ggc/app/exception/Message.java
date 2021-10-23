@@ -43,6 +43,14 @@ interface Message {
   }
 
   /**
+   * @param key partner key
+   * @return string reporting a duplicate partner
+   */
+  static String duplicateProductKey(String key) {
+    return "O produto '" + key + "' já existe.";
+  }
+
+  /**
    * @param key
    * @return string with problem description.
    */
