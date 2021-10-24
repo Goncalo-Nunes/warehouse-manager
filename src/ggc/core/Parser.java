@@ -9,7 +9,6 @@ import java.io.Reader;
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerException;
-import ggc.core.exception.DuplicateProductException;
 
 public class Parser {
 
@@ -20,7 +19,7 @@ public class Parser {
     _store = w;
   }
 
-  void parseFile(String filename) throws IOException, BadEntryException, DuplicatePartnerException, DuplicateProductException {
+  void parseFile(String filename) throws IOException, BadEntryException, DuplicatePartnerException{
     try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
       String line;
 
@@ -29,7 +28,7 @@ public class Parser {
     }
   }
 
-  private void parseLine(String line) throws BadEntryException, BadEntryException, DuplicatePartnerException, DuplicateProductException {
+  private void parseLine(String line) throws BadEntryException, BadEntryException, DuplicatePartnerException {
     String[] components = line.split("\\|");
 
     switch (components[0]) {
@@ -64,7 +63,7 @@ public class Parser {
   }
 
   //BATCH_S|idProduto|idParceiro|prec ̧o|stock-actual
-  private void parseSimpleProduct(String[] components, String line) throws BadEntryException, DuplicateProductException {
+  private void parseSimpleProduct(String[] components, String line) throws BadEntryException {
     if (components.length != 5)
       throw new BadEntryException("Invalid number of fields (4) in simple batch description: " + line);
     
@@ -93,7 +92,7 @@ public class Parser {
  
     
   //BATCH_M|idProduto|idParceiro|prec ̧o|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
-  private void parseAggregateProduct(String[] components, String line) throws BadEntryException, NumberFormatException, DuplicateProductException {
+  private void parseAggregateProduct(String[] components, String line) throws BadEntryException, NumberFormatException {
     if (components.length != 7)
       throw new BadEntryException("Invalid number of fields (7) in aggregate batch description: " + line);
     

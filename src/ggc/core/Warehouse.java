@@ -10,7 +10,6 @@ import java.io.IOException;
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerException;
-import ggc.core.exception.DuplicateProductException;
 import ggc.core.exception.InvalidDaysException;
 
 
@@ -66,7 +65,7 @@ public class Warehouse implements Serializable {
      * @throws IOException
      * @throws BadEntryException
      */
-    void importFile(String txtfile) throws IOException, BadEntryException, DuplicatePartnerException, DuplicateProductException {
+    void importFile(String txtfile) throws IOException, BadEntryException, DuplicatePartnerException {
         Parser parser = new Parser(this);
         parser.parseFile(txtfile);
     }
@@ -79,18 +78,11 @@ public class Warehouse implements Serializable {
         _partners.put(id, new Partner(id, name, address));
     }
 
-    public void registerSimpleProduct(String productId) throws DuplicateProductException {
-        if(_products.containsKey(productId)) {
-            throw new DuplicateProductException(productId);
-        }
-
+    public void registerSimpleProduct(String productId) {
         _products.put(productId, new SimpleProduct(productId));
     }
 
-    public void registerAggregateProduct(String productId, ArrayList<Product> products, ArrayList<Integer> quantities, double alpha) throws DuplicateProductException{
-        if(_products.containsKey(productId)) {
-            throw new DuplicateProductException(productId);
-        }
+    public void registerAggregateProduct(String productId, ArrayList<Product> products, ArrayList<Integer> quantities, double alpha) {
 
         ArrayList<Component> components = new ArrayList<>();
         AggregateProduct aggregateProduct = new AggregateProduct(productId);

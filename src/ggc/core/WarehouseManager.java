@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerException;
-import ggc.core.exception.DuplicateProductException;
 import ggc.core.exception.ImportFileException;
 import ggc.core.exception.InvalidDaysException;
 import ggc.core.exception.UnavailableFileException;
@@ -62,7 +61,7 @@ public class WarehouseManager {
   public void importFile(String textfile) throws ImportFileException {
     try {
       _warehouse.importFile(textfile);
-    } catch (IOException | BadEntryException | DuplicatePartnerException | DuplicateProductException e) {
+    } catch (IOException | BadEntryException | DuplicatePartnerException e) {
       throw new ImportFileException(textfile, e);
     }
   }
