@@ -76,4 +76,8 @@ public class WarehouseManager {
     
   }
 
+  public void registerPartner(String id, String name, String address) throws DuplicatePartnerException {
+    _warehouse.registerPartner(id, name, address);
+  }
+
 }
