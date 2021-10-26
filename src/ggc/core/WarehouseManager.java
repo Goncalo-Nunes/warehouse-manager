@@ -3,6 +3,9 @@ package ggc.core;
 //FIXME import classes (cannot import from pt.tecnico or ggc.app)
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
@@ -11,6 +14,7 @@ import ggc.core.exception.DuplicatePartnerException;
 import ggc.core.exception.ImportFileException;
 import ggc.core.exception.InvalidDaysException;
 import ggc.core.exception.UnavailableFileException;
+import ggc.core.exception.UnknownPartnerException;
 import ggc.core.exception.MissingFileAssociationException;
 
 /** Façade for access. */
@@ -61,7 +65,7 @@ public class WarehouseManager {
   public void importFile(String textfile) throws ImportFileException {
     try {
       _warehouse.importFile(textfile);
-    } catch (IOException | BadEntryException | DuplicatePartnerException e) {
+    } catch (IOException | BadEntryException | DuplicatePartnerException | UnknownPartnerException e) {
       throw new ImportFileException(textfile, e);
     }
   }
@@ -77,6 +81,24 @@ public class WarehouseManager {
 
   public void registerPartner(String id, String name, String address) throws DuplicatePartnerException {
     _warehouse.registerPartner(id, name, address);
+  }
+
+  public Partner getPartnerWithId(String id) throws UnknownPartnerException {
+    return _warehouse.getPartnerWithId(id);
+  }
+
+  public Collection<Partner> getPartners() {
+    return Collections.unmodifiableCollection(_warehouse.getPartners().values());
+  }
+
+  public void clearPartnerNotifications(String id) throws UnknownPartnerException {
+    Partner partner = getPartnerWithId(id);
+    partner.clearNotifications();
+  }
+
+  public List<Notification> getPartnerNotifications(String id) throws UnknownPartnerException {
+    Partner partner = getPartnerWithId(id);
+    return partner.getNotifications();
   }
 
 }

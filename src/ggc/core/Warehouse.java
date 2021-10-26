@@ -4,13 +4,17 @@ package ggc.core;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import java.io.IOException;
-
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerException;
 import ggc.core.exception.InvalidDaysException;
+import ggc.core.exception.UnknownPartnerException;
 
 
 /**
@@ -21,15 +25,12 @@ public class Warehouse implements Serializable {
     /** Serial number for serialization. */
     private static final long serialVersionUID = 202109192006L;
 
-    // FIXME define attributes
-    // FIXME define contructor(s)
-    // FIXME define methods
 
     private Date _date;
     private int _nextTransactionId;
-    private HashMap<String, Product> _products;
-    private HashMap<String, Partner> _partners;
-    private HashMap<Integer, Transaction> _transactions;
+    private Map<String, Product> _products = new TreeMap<String, Product>(String.CASE_INSENSITIVE_ORDER);
+    private Map<String, Partner> _partners = new TreeMap<String, Partner>(String.CASE_INSENSITIVE_ORDER);
+    private Map<Integer, Transaction> _transactions = new TreeMap<Integer, Transaction>();
 
     public Warehouse() {
         _date = new Date();
@@ -48,15 +49,15 @@ public class Warehouse implements Serializable {
         _date.add(offset);
     }
 
-    public HashMap<String, Product> getProducts() {
+    public Map<String, Product> getProducts() {
         return _products;
     }
 
-    public HashMap<String, Partner> getPartners() {
-        return _partners;
+    public Map<String, Partner> getPartners() {
+        return Collections.unmodifiableMap(_partners);
     }
 
-    public HashMap<Integer, Transaction> getTransactions() {
+    public Map<Integer, Transaction> getTransactions() {
         return _transactions;
     }
 
@@ -64,8 +65,9 @@ public class Warehouse implements Serializable {
      * @param txtfile filename to be loaded.
      * @throws IOException
      * @throws BadEntryException
+     * @throws UnknownPartnerException
      */
-    void importFile(String txtfile) throws IOException, BadEntryException, DuplicatePartnerException {
+    void importFile(String txtfile) throws IOException, BadEntryException, DuplicatePartnerException, UnknownPartnerException {
         Parser parser = new Parser(this);
         parser.parseFile(txtfile);
     }
@@ -99,8 +101,16 @@ public class Warehouse implements Serializable {
         return _products.get(id);
     }
 
-    public Partner getPartnerWithId(String id) {
+    public Partner getPartnerWithId(String id) throws UnknownPartnerException {
+        if(!partnerExists(id)) {
+            throw new UnknownPartnerException(id);
+        }
+
         return _partners.get(id);
+    }
+
+    public boolean partnerExists(String id) {
+        return _partners.containsKey(id);
     }
 
     public boolean productExists(String id) {
