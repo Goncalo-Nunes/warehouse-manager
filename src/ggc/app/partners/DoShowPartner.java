@@ -4,11 +4,7 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.UnknownPartnerException;
-
-import java.util.Collection;
-
 import ggc.app.exception.UnknownPartnerKeyException;
-import ggc.core.Partner;
 
 /**
  * Show partner.

@@ -3,6 +3,7 @@ package ggc.core;
 //FIXME import classes (cannot import from pt.tecnico or ggc.app)
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -99,6 +100,24 @@ public class WarehouseManager {
   public List<Notification> getPartnerNotifications(String id) throws UnknownPartnerException {
     Partner partner = getPartnerWithId(id);
     return partner.getNotifications();
+  }
+
+  public Collection<Product> getProducts() {
+    return Collections.unmodifiableCollection(_warehouse.getProducts().values());
+  }
+
+  public Collection<Batch> getBatches() {
+    ArrayList<Batch> batches = new ArrayList<Batch>();
+
+    for(Product product : _warehouse.getProducts().values()) {
+      for(Batch batch : product.getBatches()) {
+        batches.add(batch);
+      }
+    }
+
+    batches.sort(new BatchComparator());
+
+    return Collections.unmodifiableList(batches);
   }
 
 }

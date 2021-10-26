@@ -22,6 +22,10 @@ public abstract class Product {
         return _maxPrice;
     }
 
+    public LinkedList<Batch> getBatches() {
+        return _batches;
+    }
+
     public String toString() {
         return "" + _id + "|" + _maxPrice + "|" + _totalStock;
     }

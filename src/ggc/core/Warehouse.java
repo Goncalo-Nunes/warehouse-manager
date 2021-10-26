@@ -50,7 +50,7 @@ public class Warehouse implements Serializable {
     }
 
     public Map<String, Product> getProducts() {
-        return _products;
+        return Collections.unmodifiableMap(_products);
     }
 
     public Map<String, Partner> getPartners() {
