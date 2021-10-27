@@ -1,12 +1,9 @@
 package ggc.core;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.io.Serializable;
-import java.lang.Math;
 
 
 public class Partner implements Serializable {
@@ -15,12 +12,10 @@ public class Partner implements Serializable {
     private String _id;
     private String _status;
     private double _points;
-    private double _salesValue;
-    private double _salesPayed;
-    private ArrayList<Acquisition> _acquisitions = new ArrayList<Acquisition>();
-    private ArrayList<Sale> _sales = new ArrayList<Sale>();
-    private ArrayList<Batch> _batches = new ArrayList<Batch>();
-    private ArrayList<Notification> _notifications = new ArrayList<Notification>();
+    private List<Acquisition> _acquisitions = new ArrayList<Acquisition>();
+    private List<Sale> _sales = new ArrayList<Sale>();
+    private List<Batch> _batches = new ArrayList<Batch>();
+    private List<Notification> _notifications = new ArrayList<Notification>();
 
     Partner(String id, String name, String address) {
         _id = id;

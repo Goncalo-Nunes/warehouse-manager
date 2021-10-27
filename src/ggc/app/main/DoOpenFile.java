@@ -3,10 +3,7 @@ package ggc.app.main;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 
-import java.io.IOException;
-
 import ggc.app.exception.FileOpenFailedException;
-import ggc.app.exception.UnavailableProductException;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.UnavailableFileException;
 

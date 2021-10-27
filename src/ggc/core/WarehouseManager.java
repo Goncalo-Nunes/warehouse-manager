@@ -1,16 +1,15 @@
 package ggc.core;
 
-//FIXME import classes (cannot import from pt.tecnico or ggc.app)
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.*;
+import java.io.FileOutputStream;
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerException;
@@ -29,9 +28,6 @@ public class WarehouseManager {
   /** The wharehouse itself. */
   private Warehouse _warehouse = new Warehouse();
 
-  //FIXME define other attributes
-  //FIXME define constructor(s)
-  //FIXME define other methods
 
   /**
    * @@throws IOException

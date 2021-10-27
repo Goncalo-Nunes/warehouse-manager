@@ -10,8 +10,4 @@ public class SimpleProduct extends Product {
     void checkQuantity(int quantity, Partner partner) {
 
     }
-
-    public String toString() {
-        return super.toString();
-    }
 }

@@ -1,12 +1,10 @@
 package ggc.core;
 
-// FIXME import classes (cannot import from pt.tecnico or ggc.app)
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.io.IOException;
@@ -86,7 +84,7 @@ public class Warehouse implements Serializable {
 
     public void registerAggregateProduct(String productId, ArrayList<Product> products, ArrayList<Integer> quantities, double alpha) {
 
-        ArrayList<Component> components = new ArrayList<>();
+        List<Component> components = new ArrayList<>();
         AggregateProduct aggregateProduct = new AggregateProduct(productId);
 
         for(int i = 0; i < products.size(); i++) {

@@ -2,12 +2,13 @@ package ggc.core;
 
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.List;
 
 public abstract class Product implements Serializable {
     private double _maxPrice;
     private int _totalStock;
     private String _id;
-    private LinkedList<Batch> _batches = new LinkedList<Batch>();
+    private List<Batch> _batches = new LinkedList<Batch>();
 
     Product(String id) {
         _maxPrice = 0;
@@ -24,7 +25,7 @@ public abstract class Product implements Serializable {
         return _maxPrice;
     }
 
-    public LinkedList<Batch> getBatches() {
+    public List<Batch> getBatches() {
         return _batches;
     }
 

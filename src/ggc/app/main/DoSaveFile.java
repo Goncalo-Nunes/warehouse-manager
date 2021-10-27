@@ -34,6 +34,7 @@ class DoSaveFile extends Command<WarehouseManager> {
       try {
         _receiver.save();
       } catch (IOException | MissingFileAssociationException e) {
+        e.printStackTrace();
         try {
           String filename = Form.requestString(Message.saveAs());
           _receiver.saveAs(filename);
