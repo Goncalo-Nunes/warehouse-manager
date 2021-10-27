@@ -1,8 +1,9 @@
 package ggc.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Recipe {
+public class Recipe implements Serializable {
     private double _alpha;
     private AggregateProduct _product;
     private ArrayList<Component> _components;

@@ -5,10 +5,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.io.Serializable;
 import java.lang.Math;
 
 
-public class Partner {
+public class Partner implements Serializable {
     private String _name;
     private String _address;
     private String _id;

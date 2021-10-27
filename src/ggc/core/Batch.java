@@ -1,6 +1,8 @@
 package ggc.core;
 
-public class Batch {
+import java.io.Serializable;
+
+public class Batch implements Serializable {
     private double _price;
     private int _quantity;
     private Product _product;
@@ -14,7 +16,7 @@ public class Batch {
     }
 
     public String toString() {
-        return _product.getId() + "|" + _partner.getId() + "|" + _price + "|" + _quantity;
+        return _product.getId() + "|" + _partner.getId() + "|" + Math.round(_price) + "|" + _quantity;
     }
 
     /*

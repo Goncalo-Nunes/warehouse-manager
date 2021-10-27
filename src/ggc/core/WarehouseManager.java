@@ -8,7 +8,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.FileNotFoundException;
+import java.io.*;
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerException;
@@ -35,9 +37,12 @@ public class WarehouseManager {
    * @@throws IOException
    * @@throws FileNotFoundException
    * @@throws MissingFileAssociationException
+   * @throws ClassNotFoundException
    */
   public void save() throws IOException, FileNotFoundException, MissingFileAssociationException {
-    //FIXME implement serialization method
+    try (ObjectOutputStream obOut = new ObjectOutputStream(new FileOutputStream(_filename))) {
+      obOut.writeObject(_warehouse);
+    }
   }
 
   /**
@@ -45,8 +50,9 @@ public class WarehouseManager {
    * @@throws MissingFileAssociationException
    * @@throws IOException
    * @@throws FileNotFoundException
+   * @throws ClassNotFoundException
    */
-  public void saveAs(String filename) throws MissingFileAssociationException, FileNotFoundException, IOException {
+  public void saveAs(String filename) throws IOException, FileNotFoundException, MissingFileAssociationException {
     _filename = filename;
     save();
   }
@@ -54,9 +60,19 @@ public class WarehouseManager {
   /**
    * @@param filename
    * @@throws UnavailableFileException
+   * @throws FileNotFoundException
+   * @throws IOException
    */
-  public void load(String filename) throws UnavailableFileException, ClassNotFoundException  {
-    //FIXME implement serialization method
+  public void load(String filename) throws UnavailableFileException, ClassNotFoundException {
+   
+    try (ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(filename))) {
+
+      _warehouse = (Warehouse)objIn.readObject();
+      _filename = filename;
+    
+    } catch (IOException e) {
+      throw new UnavailableFileException(filename);
+    }
   }
 
   /**
@@ -71,8 +87,12 @@ public class WarehouseManager {
     }
   }
 
-  public Date getDate() {
-    return _warehouse.getDate();
+  public boolean isFilenameSet() {
+    return !_filename.isEmpty();
+  }
+
+  public int getDate() {
+    return _warehouse.getDate().getDays();
   }
 
   public void advanceDate(int offset) throws InvalidDaysException {

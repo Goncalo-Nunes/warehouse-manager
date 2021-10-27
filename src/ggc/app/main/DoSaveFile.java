@@ -2,8 +2,12 @@ package ggc.app.main;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+
+import java.io.IOException;
+
 import ggc.core.WarehouseManager;
-//FIXME import classes
+import ggc.core.exception.MissingFileAssociationException;
+import pt.tecnico.uilib.forms.Form;
 
 /**
  * Save current state to file under current name (if unnamed, query for name).
@@ -17,7 +21,30 @@ class DoSaveFile extends Command<WarehouseManager> {
 
   @Override
   public final void execute() throws CommandException {
-    //FIXME implement command and create a local Form
+
+    if(!_receiver.isFilenameSet()) {
+      String filename = Form.requestString(Message.newSaveAs());
+      try {
+        _receiver.saveAs(filename);
+      } catch (IOException | MissingFileAssociationException e) {
+        e.printStackTrace();
+      }
+
+    } else {
+      try {
+        _receiver.save();
+      } catch (IOException | MissingFileAssociationException e) {
+        try {
+          String filename = Form.requestString(Message.saveAs());
+          _receiver.saveAs(filename);
+        } catch (IOException | MissingFileAssociationException e2) {
+          e2.printStackTrace();
+        }
+
+      }
+      
+    }
+
   }
 
 }

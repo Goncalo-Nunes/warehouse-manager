@@ -1,6 +1,7 @@
 package ggc.core;
+import java.io.Serializable;
 
-public class Notification {
+public class Notification implements Serializable {
     private String _type; //Enum
     private Product _product;
 

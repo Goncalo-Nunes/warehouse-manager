@@ -1,6 +1,8 @@
 package ggc.core;
 
-public class Date {
+import java.io.Serializable;
+
+public class Date implements Serializable {
     private int _days;
 
     public Date() {
