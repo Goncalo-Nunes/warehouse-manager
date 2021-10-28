@@ -9,7 +9,7 @@ public class Recipe implements Serializable {
     private AggregateProduct _product;
     private List<Component> _components = new ArrayList<Component>();
 
-    public Recipe(AggregateProduct product, List<Component> components, double alpha) {
+    Recipe(AggregateProduct product, List<Component> components, double alpha) {
         _alpha = alpha;
         _components = components;
         _product = product;

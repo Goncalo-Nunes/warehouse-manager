@@ -22,11 +22,11 @@ public abstract class Transaction implements Serializable {
         return _isPaid;
     }
     
-    public double getBaseValue() {
+    double getBaseValue() {
         return _baseValue;
     }
 
-    public Date getPaymentDate() {
+    Date getPaymentDate() {
         return _paymentDate;
     }
 }

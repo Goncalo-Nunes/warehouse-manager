@@ -105,7 +105,7 @@ public class WarehouseManager {
   }
 
   public Collection<Partner> getPartners() {
-    return Collections.unmodifiableCollection(_warehouse.getPartners().values());
+    return Collections.unmodifiableCollection(_warehouse.getPartners());
   }
 
   public void clearPartnerNotifications(String id) throws UnknownPartnerException {
@@ -119,21 +119,11 @@ public class WarehouseManager {
   }
 
   public Collection<Product> getProducts() {
-    return Collections.unmodifiableCollection(_warehouse.getProducts().values());
+    return Collections.unmodifiableCollection(_warehouse.getProducts());
   }
 
   public Collection<Batch> getBatches() {
-    ArrayList<Batch> batches = new ArrayList<Batch>();
-
-    for(Product product : _warehouse.getProducts().values()) {
-      for(Batch batch : product.getBatches()) {
-        batches.add(batch);
-      }
-    }
-
-    batches.sort(new BatchComparator());
-
-    return Collections.unmodifiableList(batches);
+    return Collections.unmodifiableCollection(_warehouse.getAllBatchesSorted());
   }
 
 }

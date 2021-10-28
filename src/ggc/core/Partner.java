@@ -25,19 +25,19 @@ public class Partner implements Serializable {
         _points = 0;
     }
 
-    public String getId() {
+    String getId() {
         return _id;
     }
 
-    public void clearNotifications() {
+    void clearNotifications() {
         _notifications.clear();
     }
 
-    public List<Notification> getNotifications() {
+    List<Notification> getNotifications() {
         return Collections.unmodifiableList(_notifications);
     }
 
-    public double calculateAcquisitionsValue() {
+    double calculateAcquisitionsValue() {
         Double total = 0d;
 
         for (Acquisition acquisition : _acquisitions) {
@@ -47,7 +47,7 @@ public class Partner implements Serializable {
         return total;
     }
 
-    public double calculateSalesValue() {
+    double calculateSalesValue() {
         Double total = 0d;
 
         for (Sale sale : _sales) {
@@ -59,7 +59,7 @@ public class Partner implements Serializable {
         return total;
     }
 
-    public double calculateSalesPayedValue() {
+    double calculateSalesPayedValue() {
         Double total = 0d;
 
         for (Sale sale : _sales) {

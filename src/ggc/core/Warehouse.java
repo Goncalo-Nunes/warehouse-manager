@@ -3,6 +3,7 @@ package ggc.core;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,16 +31,16 @@ public class Warehouse implements Serializable {
     private Map<String, Partner> _partners = new TreeMap<String, Partner>(String.CASE_INSENSITIVE_ORDER);
     private Map<Integer, Transaction> _transactions = new TreeMap<Integer, Transaction>();
 
-    public Warehouse() {
+    Warehouse() {
         _date = new Date();
         _nextTransactionId = 0;
     }
 
-    public Date getDate() {
+    Date getDate() {
         return _date;
     }
 
-    public void advanceDate(int offset) throws InvalidDaysException {
+    void advanceDate(int offset) throws InvalidDaysException {
         if (offset <= 0) {
             throw new InvalidDaysException(offset);
         }
@@ -47,17 +48,32 @@ public class Warehouse implements Serializable {
         _date.add(offset);
     }
 
-    public Map<String, Product> getProducts() {
-        return Collections.unmodifiableMap(_products);
+    Collection<Product> getProducts() {
+        return Collections.unmodifiableCollection(_products.values());
     }
 
-    public Map<String, Partner> getPartners() {
-        return Collections.unmodifiableMap(_partners);
+    Collection<Partner> getPartners() {
+        return Collections.unmodifiableCollection(_partners.values());
     }
 
-    public Map<Integer, Transaction> getTransactions() {
-        return _transactions;
+    Collection<Transaction> getTransactions() {
+        return Collections.unmodifiableCollection(_transactions.values());
     }
+
+    List<Batch> getAllBatchesSorted() {
+        ArrayList<Batch> batches = new ArrayList<Batch>();
+
+        for(Product product : getProducts()) {
+          for(Batch batch : product.getBatches()) {
+            batches.add(batch);
+          }
+        }
+    
+        batches.sort(new BatchComparator());
+    
+        return Collections.unmodifiableList(batches);
+    }
+
 
     /**
      * @param txtfile filename to be loaded.
@@ -70,7 +86,7 @@ public class Warehouse implements Serializable {
         parser.parseFile(txtfile);
     }
 
-    public void registerPartner(String id, String name, String address) throws DuplicatePartnerException {
+    void registerPartner(String id, String name, String address) throws DuplicatePartnerException {
         if(_partners.containsKey(id)) {
             throw new DuplicatePartnerException(id);
         }
@@ -78,11 +94,11 @@ public class Warehouse implements Serializable {
         _partners.put(id, new Partner(id, name, address));
     }
 
-    public void registerSimpleProduct(String productId) {
+    void registerSimpleProduct(String productId) {
         _products.put(productId, new SimpleProduct(productId));
     }
 
-    public void registerAggregateProduct(String productId, ArrayList<Product> products, ArrayList<Integer> quantities, double alpha) {
+    void registerAggregateProduct(String productId, ArrayList<Product> products, ArrayList<Integer> quantities, double alpha) {
 
         List<Component> components = new ArrayList<>();
         AggregateProduct aggregateProduct = new AggregateProduct(productId);
@@ -95,11 +111,11 @@ public class Warehouse implements Serializable {
         _products.put(productId, aggregateProduct);
     }
 
-    public Product getProductWithId(String id) {
+    Product getProductWithId(String id) {
         return _products.get(id);
     }
 
-    public Partner getPartnerWithId(String id) throws UnknownPartnerException {
+    Partner getPartnerWithId(String id) throws UnknownPartnerException {
         if(!partnerExists(id)) {
             throw new UnknownPartnerException(id);
         }
@@ -107,11 +123,11 @@ public class Warehouse implements Serializable {
         return _partners.get(id);
     }
 
-    public boolean partnerExists(String id) {
+    boolean partnerExists(String id) {
         return _partners.containsKey(id);
     }
 
-    public boolean productExists(String id) {
+    boolean productExists(String id) {
         return _products.containsKey(id);
     }
 
