@@ -14,6 +14,7 @@ import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerException;
 import ggc.core.exception.InvalidDaysException;
 import ggc.core.exception.UnknownPartnerException;
+import ggc.core.exception.UnknownProductException;
 
 
 /**
@@ -80,8 +81,10 @@ public class Warehouse implements Serializable {
      * @throws IOException
      * @throws BadEntryException
      * @throws UnknownPartnerException
+     * @throws UnknownProductException
+     * @throws NumberFormatException
      */
-    void importFile(String txtfile) throws IOException, BadEntryException, DuplicatePartnerException, UnknownPartnerException {
+    void importFile(String txtfile) throws IOException, BadEntryException, DuplicatePartnerException, UnknownPartnerException, NumberFormatException, UnknownProductException {
         Parser parser = new Parser(this);
         parser.parseFile(txtfile);
     }
@@ -111,8 +114,19 @@ public class Warehouse implements Serializable {
         _products.put(productId, aggregateProduct);
     }
 
-    Product getProductWithId(String id) {
+    Product getProductWithId(String id) throws UnknownProductException {
+        if(!productExists(id)) {
+            throw new UnknownProductException(id);
+        }
         return _products.get(id);
+    }
+
+    Collection<Batch> getBatchesFromProduct(String id) throws UnknownProductException {
+        return getProductWithId(id).getBatches();
+    }
+
+    Collection<Batch> getBatchesFromPartner(String id) throws UnknownPartnerException {
+        return getPartnerWithId(id).getBatches();
     }
 
     Partner getPartnerWithId(String id) throws UnknownPartnerException {

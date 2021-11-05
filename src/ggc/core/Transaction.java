@@ -17,11 +17,22 @@ public abstract class Transaction implements Serializable {
         _partner = partner;
     }
 
-    
-    public boolean isPaid() {
-        return _isPaid;
+    int getId() {
+        return _id;
     }
     
+    Partner getPartner() {
+        return _partner;
+    }
+
+    Product getProduct() {
+        return _product;
+    }
+
+    int getQuantity() {
+        return _quantity;
+    }
+
     double getBaseValue() {
         return _baseValue;
     }
@@ -29,4 +40,9 @@ public abstract class Transaction implements Serializable {
     Date getPaymentDate() {
         return _paymentDate;
     }
+
+    public boolean isPaid() {
+        return _isPaid;
+    }
+    
 }

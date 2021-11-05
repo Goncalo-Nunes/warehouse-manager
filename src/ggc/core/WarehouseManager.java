@@ -17,6 +17,7 @@ import ggc.core.exception.ImportFileException;
 import ggc.core.exception.InvalidDaysException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.UnknownPartnerException;
+import ggc.core.exception.UnknownProductException;
 import ggc.core.exception.MissingFileAssociationException;
 
 /** Façade for access. */
@@ -78,7 +79,7 @@ public class WarehouseManager {
   public void importFile(String textfile) throws ImportFileException {
     try {
       _warehouse.importFile(textfile);
-    } catch (IOException | BadEntryException | DuplicatePartnerException | UnknownPartnerException e) {
+    } catch (IOException | BadEntryException | DuplicatePartnerException | UnknownPartnerException | UnknownProductException e) {
       throw new ImportFileException(textfile, e);
     }
   }
@@ -126,4 +127,11 @@ public class WarehouseManager {
     return Collections.unmodifiableCollection(_warehouse.getAllBatchesSorted());
   }
 
+  public Collection<Batch> getBatchesFromPartner(String id) throws UnknownPartnerException {
+    return Collections.unmodifiableCollection(_warehouse.getBatchesFromPartner(id));
+  }
+
+  public Collection<Batch> getBatchesFromProduct(String id) throws UnknownProductException { 
+    return Collections.unmodifiableCollection(_warehouse.getBatchesFromProduct(id));
+  }
 }

@@ -13,9 +13,16 @@ public class SaleByCredit extends Sale {
         return _amountPaid;
     }
 
-    /*
     public String toString() {
+        Partner partner = getPartner();
+        Product product = getProduct();
+        String ret =  "VENDA|" + "|" + getId() + "|" + partner.getId() + "|" + product.getId()
+        + "|" + getQuantity() + "|" + getBaseValue() + "|" + _amountPaid + "|" + _deadline;
 
+        if(isPaid()) {
+            ret += "|" + getPaymentDate();
+        }
+
+        return ret;
     }
-    */
 }

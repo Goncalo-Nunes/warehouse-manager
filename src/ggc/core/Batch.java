@@ -28,6 +28,12 @@ public class Batch implements Serializable {
      * 
      * @param id
      *          batch ID.
+     * @param quantity
+     *          batch quantity.
+     * @param partner
+     *          partner that supplied the batch.
+     * @param product
+     *          batch's product.
      */
     Batch(double price, int quantity, Partner partner, Product product) {
         _price = price;

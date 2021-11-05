@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerException;
 import ggc.core.exception.UnknownPartnerException;
+import ggc.core.exception.UnknownProductException;
 
 public class Parser {
 
@@ -18,7 +19,7 @@ public class Parser {
     _store = w;
   }
 
-  void parseFile(String filename) throws IOException, BadEntryException, DuplicatePartnerException, UnknownPartnerException{
+  void parseFile(String filename) throws IOException, BadEntryException, DuplicatePartnerException, UnknownPartnerException, NumberFormatException, UnknownProductException{
     try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
       String line;
 
@@ -27,7 +28,7 @@ public class Parser {
     }
   }
 
-  private void parseLine(String line) throws BadEntryException, BadEntryException, DuplicatePartnerException, UnknownPartnerException {
+  private void parseLine(String line) throws BadEntryException, BadEntryException, DuplicatePartnerException, UnknownPartnerException, NumberFormatException, UnknownProductException {
     String[] components = line.split("\\|");
 
     switch (components[0]) {
@@ -62,7 +63,7 @@ public class Parser {
   }
 
   //BATCH_S|idProduto|idParceiro|prec ̧o|stock-actual
-  private void parseSimpleProduct(String[] components, String line) throws BadEntryException, UnknownPartnerException {
+  private void parseSimpleProduct(String[] components, String line) throws BadEntryException, UnknownPartnerException, UnknownProductException {
     if (components.length != 5)
       throw new BadEntryException("Invalid number of fields (4) in simple batch description: " + line);
     
@@ -91,7 +92,7 @@ public class Parser {
  
     
   //BATCH_M|idProduto|idParceiro|prec ̧o|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
-  private void parseAggregateProduct(String[] components, String line) throws BadEntryException, NumberFormatException, UnknownPartnerException {
+  private void parseAggregateProduct(String[] components, String line) throws BadEntryException, NumberFormatException, UnknownPartnerException, UnknownProductException {
     if (components.length != 7)
       throw new BadEntryException("Invalid number of fields (7) in aggregate batch description: " + line);
     

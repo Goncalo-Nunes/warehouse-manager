@@ -3,6 +3,8 @@ package ggc.core;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -21,7 +23,7 @@ public abstract class Product implements Serializable {
     private String _id;
 
     /** Product's list of batches. */
-    private List<Batch> _batches = new LinkedList<Batch>();
+    private Set<Batch> _batches = new TreeSet<Batch>(new BatchComparator());
 
 
     /**
@@ -53,7 +55,7 @@ public abstract class Product implements Serializable {
     /**
      * @return the product's batches.
      */
-    List<Batch> getBatches() {
+    Set<Batch> getBatches() {
         return _batches;
     }
 

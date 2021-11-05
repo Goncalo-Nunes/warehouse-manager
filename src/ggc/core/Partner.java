@@ -1,8 +1,11 @@
 package ggc.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.io.Serializable;
 
 
@@ -14,7 +17,7 @@ public class Partner implements Serializable {
     private double _points;
     private List<Acquisition> _acquisitions = new ArrayList<Acquisition>();
     private List<Sale> _sales = new ArrayList<Sale>();
-    private List<Batch> _batches = new ArrayList<Batch>();
+    private Set<Batch> _batches = new TreeSet<Batch>(new BatchComparator());
     private List<Notification> _notifications = new ArrayList<Notification>();
 
     Partner(String id, String name, String address) {
@@ -27,6 +30,10 @@ public class Partner implements Serializable {
 
     String getId() {
         return _id;
+    }
+
+    Collection<Batch> getBatches() {
+        return _batches;
     }
 
     void clearNotifications() {
