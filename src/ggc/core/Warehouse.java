@@ -145,4 +145,12 @@ public class Warehouse implements Serializable {
         return _products.containsKey(id);
     }
 
+    Collection<Acquisition> getAcquisitionsFromPartner(String id) throws UnknownPartnerException {
+        return getPartnerWithId(id).getAcquisitions();
+    }
+
+    Collection<Sale> getSalesFromPartner(String id) throws UnknownPartnerException {
+        return getPartnerWithId(id).getSales();
+    }
+
 }

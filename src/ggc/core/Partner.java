@@ -36,6 +36,14 @@ public class Partner implements Serializable {
         return _batches;
     }
 
+    Collection<Acquisition> getAcquisitions() {
+        return _acquisitions;
+    }
+
+    Collection<Sale> getSales() {
+        return _sales;
+    }
+
     void clearNotifications() {
         _notifications.clear();
     }

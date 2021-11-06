@@ -134,4 +134,12 @@ public class WarehouseManager {
   public Collection<Batch> getBatchesFromProduct(String id) throws UnknownProductException { 
     return Collections.unmodifiableCollection(_warehouse.getBatchesFromProduct(id));
   }
+
+  public Collection<Acquisition> getAcquisitionsFromPartner(String id) throws UnknownPartnerException {
+    return Collections.unmodifiableCollection(_warehouse.getAcquisitionsFromPartner(id));
+}
+
+  public Collection<Sale> getSalesFromPartner(String id) throws UnknownPartnerException {
+    return Collections.unmodifiableCollection(_warehouse.getSalesFromPartner(id));
+}
 }
