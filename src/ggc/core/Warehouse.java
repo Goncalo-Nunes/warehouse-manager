@@ -137,7 +137,7 @@ public class Warehouse implements Serializable {
                 lookup.add(batch);
           }
         }
-        
+        lookup.sort(new BatchComparator());
         return Collections.unmodifiableList(lookup);
 
     }
