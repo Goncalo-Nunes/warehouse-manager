@@ -15,6 +15,7 @@ import ggc.core.exception.DuplicatePartnerException;
 import ggc.core.exception.InvalidDaysException;
 import ggc.core.exception.UnknownPartnerException;
 import ggc.core.exception.UnknownProductException;
+import ggc.core.exception.UnknownTransactionException;
 
 
 /**
@@ -151,6 +152,14 @@ public class Warehouse implements Serializable {
 
     Collection<Sale> getSalesFromPartner(String id) throws UnknownPartnerException {
         return getPartnerWithId(id).getSales();
+    }
+
+    Transaction getTransactionWithId(int id) throws UnknownTransactionException {
+        if(!_transactions.containsKey(id)) {
+            throw new UnknownTransactionException(id);
+        }
+        
+        return _transactions.get(id);
     }
 
 }

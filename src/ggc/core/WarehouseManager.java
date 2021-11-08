@@ -18,6 +18,7 @@ import ggc.core.exception.InvalidDaysException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.UnknownPartnerException;
 import ggc.core.exception.UnknownProductException;
+import ggc.core.exception.UnknownTransactionException;
 import ggc.core.exception.MissingFileAssociationException;
 
 /** Façade for access. */
@@ -137,9 +138,13 @@ public class WarehouseManager {
 
   public Collection<Acquisition> getAcquisitionsFromPartner(String id) throws UnknownPartnerException {
     return Collections.unmodifiableCollection(_warehouse.getAcquisitionsFromPartner(id));
-}
+  }
 
   public Collection<Sale> getSalesFromPartner(String id) throws UnknownPartnerException {
     return Collections.unmodifiableCollection(_warehouse.getSalesFromPartner(id));
-}
+  }
+
+  public Transaction getTransactionWithId(int id) throws UnknownTransactionException {
+    return _warehouse.getTransactionWithId(id);
+  }
 }

@@ -15,6 +15,10 @@ public class Recipe implements Serializable {
         _product = product;
     }
 
+    double getAlpha() {
+        return _alpha;
+    }
+
     public String toString() {
         String ret = "";
 

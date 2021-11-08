@@ -12,6 +12,10 @@ public class AggregateProduct extends Product{
         _recipe = recipe;
     }
 
+    public Recipe getRecipe() {
+        return _recipe;
+    }
+
     void checkQuantity(int quantity, Partner partner) {
 
     }

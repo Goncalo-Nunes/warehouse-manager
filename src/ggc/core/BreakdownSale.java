@@ -15,7 +15,10 @@ public class BreakdownSale extends Sale {
     //FIXME falta o resto
     public String toString() {
         Partner partner = getPartner();
-        Product product = getProduct();
-        return "DESAGREGAÇÂO" + "|" + getId() + "|" + partner.getId();
+        AggregateProduct product = (AggregateProduct)getProduct();
+        Recipe recipe = product.getRecipe();
+        return "DESAGREGAÇÂO" + "|" + getId() + "|" + partner.getId() + 
+        "|" + product.getId() + "|" + getQuantity() + "|" + recipe.getAlpha()
+        + "|" + getBaseValue() + "|" + getPaymentDate() + "|" + recipe.toString();
     }
 }
