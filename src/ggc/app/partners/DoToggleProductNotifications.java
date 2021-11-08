@@ -25,12 +25,12 @@ class DoToggleProductNotifications extends Command<WarehouseManager> {
     String id = stringField("id");
     try {
       for(Partner parner : getNotifications()) {
-        if (_receiver.getPartnerNotifications(id) = false) {
+        if (_receiver.getPartnerNotifications(id) = false);
 
       }
-    } 
+    }
       catch (UnknownProductKeyException e) {
       throw new UnknownProductKeyException(e.getProductKey());
   }
-
+}
 }

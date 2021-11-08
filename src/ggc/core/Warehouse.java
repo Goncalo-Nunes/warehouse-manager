@@ -129,6 +129,19 @@ public class Warehouse implements Serializable {
         return getPartnerWithId(id).getBatches();
     }
 
+    List<Batch> getBatchesUnderGivenPrice(int price) {
+        List<Batch> lookup = new ArrayList<>();
+        for(Product product : getProducts()) {
+          for(Batch batch : product.getBatches()) {
+            if (price < batch.getPrice())
+                lookup.add(batch);
+          }
+        }
+        
+        return Collections.unmodifiableList(lookup);
+
+    }
+
     Partner getPartnerWithId(String id) throws UnknownPartnerException {
         if(!partnerExists(id)) {
             throw new UnknownPartnerException(id);
