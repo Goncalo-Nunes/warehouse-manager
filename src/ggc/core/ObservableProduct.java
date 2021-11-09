@@ -8,8 +8,6 @@ public interface ObservableProduct extends Serializable {
      * 
      * @param observer
      *          Partner being added as an Observer.
-     * @param p
-     *          product being added to be observed by Observer.
      */
     void registerObserver(ProductObserver observer);
 

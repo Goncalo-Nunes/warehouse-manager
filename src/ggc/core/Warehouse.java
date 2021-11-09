@@ -98,8 +98,16 @@ public class Warehouse implements Serializable {
         _partners.put(id, new Partner(id, name, address));
     }
 
+    void makeProductOberversInterested(Product product) {
+        for (ProductObserver observer : _partners.values()) {
+            product.registerObserver(observer);
+        }
+    }
+
     void registerSimpleProduct(String productId) {
-        _products.put(productId, new SimpleProduct(productId));
+        SimpleProduct product = new SimpleProduct(productId);
+        makeProductOberversInterested(product);
+        _products.put(productId, product);
     }
 
     void registerAggregateProduct(String productId, ArrayList<Product> products, ArrayList<Integer> quantities, double alpha) {
@@ -112,6 +120,7 @@ public class Warehouse implements Serializable {
         }
 
         aggregateProduct.setRecipe(new Recipe(aggregateProduct, components, alpha));
+        makeProductOberversInterested(aggregateProduct);
         _products.put(productId, aggregateProduct);
     }
 
@@ -161,5 +170,13 @@ public class Warehouse implements Serializable {
         
         return _transactions.get(id);
     }
+
+    void toggleNotifications(Product product, ProductObserver observer) {
+        if(product.observerExists(observer)) {
+            product.removeObserver(observer);
+        } else {
+            product.registerObserver(observer);
+        }
+      }
 
 }

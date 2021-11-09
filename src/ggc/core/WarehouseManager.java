@@ -119,6 +119,12 @@ public class WarehouseManager {
     return Collections.unmodifiableCollection(_warehouse.getProducts());
   }
 
+  public void togglePartnerNotifications(String productId, String partnerId) throws UnknownProductException, UnknownPartnerException {
+    Product product = _warehouse.getProductWithId(productId);
+    ProductObserver observer = _warehouse.getPartnerWithId(partnerId);
+    _warehouse.toggleNotifications(product, observer);
+  }
+
   public Collection<Batch> getBatches() {
     return Collections.unmodifiableCollection(_warehouse.getAllBatchesSorted());
   }

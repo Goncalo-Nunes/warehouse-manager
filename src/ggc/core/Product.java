@@ -1,7 +1,10 @@
 package ggc.core;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -29,7 +32,7 @@ public abstract class Product implements ObservableProduct {
     private Set<Batch> _batches = new TreeSet<Batch>(new BatchComparator());
 
     /** Array containing observers who want to be notified about this product's events. */
-    private Map<ProductObserver, Boolean> _observers = new HashMap<ProductObserver, Boolean>();
+    private Set<ProductObserver> _observers = new HashSet<ProductObserver>();
 
     /**
      * Create a product.
@@ -116,22 +119,24 @@ public abstract class Product implements ObservableProduct {
         _totalStock -= quantity;
     }
 
+    boolean observerExists(ProductObserver observer) {
+        return _observers.contains(observer);
+    }
+
     @Override
     public void registerObserver(ProductObserver observer) {
-        _observers.put(observer, true);
+        _observers.add(observer);
     }
 
     @Override
     public void removeObserver(ProductObserver observer) {
-        _observers.put(observer, true);
+        _observers.remove(observer);
     }
 
     @Override
     public void notifyObservers(String type) {
-        for (Map.Entry<ProductObserver, Boolean> observer : _observers.entrySet()) {
-            if (observer.getValue() == true) {
-                observer.getKey().update(type, this);
-            }
+        for (ProductObserver observer : _observers) {
+            observer.update(type, this);
         }
     }
     

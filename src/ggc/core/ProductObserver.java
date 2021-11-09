@@ -6,10 +6,12 @@ public interface ProductObserver {
      * 
      * @param type
      *          notification type.
-     * @param productID
-     *          product ID.
-     * @param price
-     *          product price.
+     * @param product
+     *          product
      */
     void update(String type, Product product);
+
+    int hashCode();
+
+    boolean equals();
 }
