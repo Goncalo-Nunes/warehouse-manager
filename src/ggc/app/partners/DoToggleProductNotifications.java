@@ -21,7 +21,7 @@ class DoToggleProductNotifications extends Command<WarehouseManager> {
 
   @Override
   public void execute() throws CommandException {
-    String key = stringField("key");
+   /* String key = stringField("key");
     String id = stringField("id");
     try {
       for(Partner parner : getNotifications()) {
@@ -31,6 +31,6 @@ class DoToggleProductNotifications extends Command<WarehouseManager> {
     }
       catch (UnknownProductKeyException e) {
       throw new UnknownProductKeyException(e.getProductKey());
-  }
+  }*/
 }
 }

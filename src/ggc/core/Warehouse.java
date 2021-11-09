@@ -166,4 +166,19 @@ public class Warehouse implements Serializable {
         return getPartnerWithId(id).getSales();
     }
 
+    List<Transaction> getPaymentsPartner(String id) throws UnknownPartnerException {
+        List<Transaction> payments = new ArrayList<>();
+        for (Partner partner : getPartners()){
+            for(Transaction transaction : getTransactions()) {
+                if(transaction.isPaid())
+                    payments.add(transaction);
+          }
+        }
+        
+        return Collections.unmodifiableList(payments);
+    }
+
+
+
+
 }

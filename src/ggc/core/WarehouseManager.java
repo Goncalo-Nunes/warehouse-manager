@@ -137,14 +137,18 @@ public class WarehouseManager {
 
   public Collection<Acquisition> getAcquisitionsFromPartner(String id) throws UnknownPartnerException {
     return Collections.unmodifiableCollection(_warehouse.getAcquisitionsFromPartner(id));
-}
+  }
 
   public Collection<Sale> getSalesFromPartner(String id) throws UnknownPartnerException {
     return Collections.unmodifiableCollection(_warehouse.getSalesFromPartner(id));
-}
+  }
 
   public Collection<Batch> getBatchesUnderGivenPrice(int price) {
     return Collections.unmodifiableCollection(_warehouse.getBatchesUnderGivenPrice(price));
+  }
+
+  public Collection<Sale> getPaymentsPartner(String id) throws UnknownPartnerException {
+    return Collections.unmodifiableCollection(_warehouse.getPaymentsPartner(id));
   }
 
 }
