@@ -139,6 +139,19 @@ public class Warehouse implements Serializable {
         return getPartnerWithId(id).getBatches();
     }
 
+    List<Batch> getBatchesUnderGivenPrice(int price) {
+        List<Batch> lookup = new ArrayList<>();
+        for(Product product : getProducts()) {
+          for(Batch batch : product.getBatches()) {
+            if (price < batch.getPrice())
+                lookup.add(batch);
+          }
+        }
+        lookup.sort(new BatchComparator());
+        return Collections.unmodifiableList(lookup);
+
+    }
+
     Partner getPartnerWithId(String id) throws UnknownPartnerException {
         if(!partnerExists(id)) {
             throw new UnknownPartnerException(id);
@@ -178,5 +191,25 @@ public class Warehouse implements Serializable {
             product.registerObserver(observer);
         }
       }
+
+
+    List<Transaction> getPaymentsPartner(String id) throws UnknownPartnerException {
+        ArrayList<Transaction> payments = new ArrayList<>();
+        Partner partner = getPartnerWithId(id);
+        
+        for(Transaction transaction : getTransactions()) {
+            if(transaction.isPaid() && transaction.getPartner().equals(partner))
+                payments.add(transaction);
+          
+        }
+        
+        return Collections.unmodifiableList(payments);
+    }
+
+    void registerBreakdownTransaction(Product product, int quantity, Partner partner) throws UnknownPartnerException {
+        //FIXME check quantidade com stock, check if derivado
+        
+    }
+
 
 }

@@ -13,5 +13,5 @@ public interface ProductObserver {
 
     int hashCode();
 
-    boolean equals();
+    boolean equals(Object other);
 }

@@ -91,10 +91,12 @@ public class Partner implements ProductObserver, Serializable {
         _notifications.add(_deliveryMode.deliverNotification(type, product));
     }
 
+    @Override
     public int hashCode() {
         return _id.hashCode();
     }
 
+    @Override
     public boolean equals(Object other) {
         if(other == this) {
             return true;

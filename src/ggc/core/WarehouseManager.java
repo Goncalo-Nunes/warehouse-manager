@@ -110,6 +110,12 @@ public class WarehouseManager {
     return Collections.unmodifiableCollection(_warehouse.getPartners());
   }
 
+
+  public void registerBreakdownTransaction(Product product, int quantity, Partner partner) throws UnknownPartnerException {
+    _warehouse.registerBreakdownTransaction(product, quantity, partner);
+  }
+
+
   public List<Notification> getPartnerNotifications(String id) throws UnknownPartnerException {
     Partner partner = getPartnerWithId(id);
     return partner.getNotifications();
@@ -148,4 +154,14 @@ public class WarehouseManager {
   public Transaction getTransactionWithId(int id) throws UnknownTransactionException {
     return _warehouse.getTransactionWithId(id);
   }
+  
+  public Collection<Batch> getBatchesUnderGivenPrice(int price) {
+    return Collections.unmodifiableCollection(_warehouse.getBatchesUnderGivenPrice(price));
+  }
+
+  public Collection<Transaction> getPaymentsPartner(String id) throws UnknownPartnerException {
+    return Collections.unmodifiableCollection(_warehouse.getPaymentsPartner(id));
+  }
+
+
 }
