@@ -114,6 +114,11 @@ public class WarehouseManager {
     partner.clearNotifications();
   }
 
+  public void registerBreakdownTransaction(Product product, int quantity, Partner partner) throws UnknownPartnerException {
+    _warehouse.registerBreakdownTransaction(product, quantity, partner);
+  }
+
+
   public List<Notification> getPartnerNotifications(String id) throws UnknownPartnerException {
     Partner partner = getPartnerWithId(id);
     return partner.getNotifications();
@@ -150,5 +155,6 @@ public class WarehouseManager {
   public Collection<Transaction> getPaymentsPartner(String id) throws UnknownPartnerException {
     return Collections.unmodifiableCollection(_warehouse.getPaymentsPartner(id));
   }
+
 
 }
