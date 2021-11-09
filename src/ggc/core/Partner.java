@@ -82,8 +82,8 @@ public class Partner implements ProductObserver, Serializable {
         Double total = 0d;
 
         for (Sale sale : _sales) {
-            if(sale.isPaid() && sale instanceof SaleByCredit) {
-                total += ((SaleByCredit)sale).getAmountPaid();
+            if(sale.isPaid()) {
+                total += sale.getAmountPaid();
             }
         }
 

@@ -2,6 +2,8 @@ package ggc.core;
 
 import java.io.Serializable;
 
+import javax.swing.AbstractAction;
+
 public abstract class Transaction implements Serializable {
     private int _id;
     private Date _paymentDate;
@@ -15,6 +17,10 @@ public abstract class Transaction implements Serializable {
         _product = product;
         _quantity = quantity;
         _partner = partner;
+    }
+
+    double getAmountPaid() {
+        return 0;
     }
 
     int getId() {
@@ -41,6 +47,7 @@ public abstract class Transaction implements Serializable {
         return _paymentDate;
     }
 
+    
     public boolean isPaid() {
         return _isPaid;
     }
