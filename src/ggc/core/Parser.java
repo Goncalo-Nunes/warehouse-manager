@@ -26,6 +26,13 @@ public class Parser {
       while ((line = reader.readLine()) != null)
         parseLine(line);
     }
+
+    /*
+    * Clear all notifications after file has been parsed
+    */ 
+    for(Partner partner : _store.getPartners()) {
+      partner.getNotifications();
+    }
   }
 
   private void parseLine(String line) throws BadEntryException, BadEntryException, DuplicatePartnerException, UnknownPartnerException, NumberFormatException, UnknownProductException {

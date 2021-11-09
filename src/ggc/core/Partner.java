@@ -9,23 +9,29 @@ import java.util.TreeSet;
 import java.io.Serializable;
 
 
-public class Partner implements Serializable {
+public class Partner implements ProductObserver, Serializable {
     private String _name;
     private String _address;
     private String _id;
     private String _status;
     private double _points;
+    private NotificationDeliveryMode _deliveryMode;
     private List<Acquisition> _acquisitions = new ArrayList<Acquisition>();
     private List<Sale> _sales = new ArrayList<Sale>();
     private Set<Batch> _batches = new TreeSet<Batch>(new BatchComparator());
     private List<Notification> _notifications = new ArrayList<Notification>();
 
     Partner(String id, String name, String address) {
+        this(id, name, address, new DefaultDeliveryMode());
+    }
+
+    Partner(String id, String name, String address, NotificationDeliveryMode mode) {
         _id = id;
         _name = name;
         _address = address;
         _status = "NORMAL";
         _points = 0;
+        _deliveryMode = mode;
     }
 
     String getId() {
@@ -44,12 +50,10 @@ public class Partner implements Serializable {
         return _sales;
     }
 
-    void clearNotifications() {
-        _notifications.clear();
-    }
-
     List<Notification> getNotifications() {
-        return Collections.unmodifiableList(_notifications);
+        List<Notification> _notificationsCopy = _notifications;
+        _notifications = new ArrayList<Notification>();
+        return Collections.unmodifiableList(_notificationsCopy);
     }
 
     double calculateAcquisitionsValue() {
@@ -86,6 +90,27 @@ public class Partner implements Serializable {
         return total;
     }
 
+    public void update(String type, Product product) {
+        _notifications.add(_deliveryMode.deliverNotification(type, product));
+    }
+
+    public int hashCode() {
+        return _id.hashCode();
+    }
+
+    public boolean equals(Object other) {
+        if(other == this) {
+            return true;
+        }
+
+        if (!(other instanceof Partner)) {
+            return false;
+        }
+
+        Partner partner = (Partner)other;
+
+        return partner.getId().equals(_id);
+    }
 
     public String toString() {
         return _id + "|" + _name + "|" + _address + "|" +_status + "|" + Math.round(_points) + "|" 
