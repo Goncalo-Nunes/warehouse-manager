@@ -167,7 +167,7 @@ public class Warehouse implements Serializable {
     }
 
     List<Transaction> getPaymentsPartner(String id) throws UnknownPartnerException {
-        List<Transaction> payments = new ArrayList<>();
+        ArrayList<Transaction> payments = new ArrayList<>();
         for (Partner partner : getPartners()){
             for(Transaction transaction : getTransactions()) {
                 if(transaction.isPaid())
@@ -178,7 +178,9 @@ public class Warehouse implements Serializable {
         return Collections.unmodifiableList(payments);
     }
 
-
+    void registerBreakdownTransaction(Product product, int quantity, Partner partner) throws UnknownPartnerException {
+        //FIXME check quantidade com stock, check if derivado
+    }
 
 
 }
