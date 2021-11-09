@@ -110,11 +110,6 @@ public class WarehouseManager {
     return Collections.unmodifiableCollection(_warehouse.getPartners());
   }
 
-  public void clearPartnerNotifications(String id) throws UnknownPartnerException {
-    Partner partner = getPartnerWithId(id);
-    partner.clearNotifications();
-  }
-
   public List<Notification> getPartnerNotifications(String id) throws UnknownPartnerException {
     Partner partner = getPartnerWithId(id);
     return partner.getNotifications();
