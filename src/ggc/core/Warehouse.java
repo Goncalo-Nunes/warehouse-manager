@@ -94,8 +94,12 @@ public class Warehouse implements Serializable {
         if(_partners.containsKey(id)) {
             throw new DuplicatePartnerException(id);
         }
+        Partner partner =  new Partner(id, name, address);
 
-        _partners.put(id, new Partner(id, name, address));
+        for(Product product : _products.values()) {
+            product.registerObserver(partner);
+        }
+        _partners.put(id, partner);
     }
 
     void makeProductOberversInterested(Product product) {
@@ -200,7 +204,6 @@ public class Warehouse implements Serializable {
         for(Transaction transaction : getTransactions()) {
             if(transaction.isPaid() && transaction.getPartner().equals(partner))
                 payments.add(transaction);
-          
         }
         
         return Collections.unmodifiableList(payments);
