@@ -29,6 +29,7 @@ public class Warehouse implements Serializable {
 
     private Date _date;
     private int _nextTransactionId;
+    private int _availableBalance;
     private Map<String, Product> _products = new TreeMap<String, Product>(String.CASE_INSENSITIVE_ORDER);
     private Map<String, Partner> _partners = new TreeMap<String, Partner>(String.CASE_INSENSITIVE_ORDER);
     private Map<Integer, Transaction> _transactions = new TreeMap<Integer, Transaction>();
@@ -36,6 +37,7 @@ public class Warehouse implements Serializable {
     Warehouse() {
         _date = new Date();
         _nextTransactionId = 0;
+        _availableBalance = 0;
     }
 
     Date getDate() {
@@ -114,9 +116,9 @@ public class Warehouse implements Serializable {
         _products.put(productId, product);
     }
 
-    void registerAggregateProduct(String productId, ArrayList<Product> products, ArrayList<Integer> quantities, double alpha) {
+    void registerAggregateProduct(String productId, List<Product> products, List<Integer> quantities, double alpha) {
 
-        List<Component> components = new ArrayList<>();
+        List<Component> components = new ArrayList<Component>();
         AggregateProduct aggregateProduct = new AggregateProduct(productId);
 
         for(int i = 0; i < products.size(); i++) {
@@ -212,6 +214,15 @@ public class Warehouse implements Serializable {
     void registerBreakdownTransaction(Product product, int quantity, Partner partner) throws UnknownPartnerException {
         //FIXME check quantidade com stock, check if derivado
         
+    }
+
+    void registerAcquisitionTransaction(Partner partner, Product product, double price, int quantity) {
+        _transactions.put(_nextTransactionId, new Acquisition(product, quantity, partner));
+
+        product.addBatch(price, quantity, partner);
+
+        _nextTransactionId++;
+        _availableBalance -= price;
     }
 
 

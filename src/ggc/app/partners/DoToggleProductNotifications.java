@@ -5,8 +5,6 @@ import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.app.exception.UnknownProductKeyException;
 import ggc.core.WarehouseManager;
-import ggc.app.exception.UnknownProductKeyException;
-//FIXME import classes
 import ggc.core.exception.UnknownPartnerException;
 import ggc.core.exception.UnknownProductException;
 

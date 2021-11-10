@@ -154,7 +154,7 @@ public class WarehouseManager {
   public Transaction getTransactionWithId(int id) throws UnknownTransactionException {
     return _warehouse.getTransactionWithId(id);
   }
-  
+
   public Collection<Batch> getBatchesUnderGivenPrice(int price) {
     return Collections.unmodifiableCollection(_warehouse.getBatchesUnderGivenPrice(price));
   }
@@ -163,5 +163,27 @@ public class WarehouseManager {
     return Collections.unmodifiableCollection(_warehouse.getPaymentsPartner(id));
   }
 
+  public boolean productExists(String id) {
+    return _warehouse.productExists(id);
+  }
 
+  public void registerAcquisitionTransaction(String partnerId, String productId, double price, int quantity) throws UnknownPartnerException, UnknownProductException {
+    Partner partner = _warehouse.getPartnerWithId(partnerId);
+    Product product = _warehouse.getProductWithId(productId);
+
+    _warehouse.registerAcquisitionTransaction(partner, product, price, quantity);
+  }
+
+  public void registerAggregateProduct(String productId, List<String> productIds, List<Integer> quantities, double alpha) throws UnknownProductException {
+    List<Product> products = new ArrayList<Product>();
+
+    for(String id : productIds) {
+      products.add(_warehouse.getProductWithId(id));
+    }
+    _warehouse.registerAggregateProduct(productId, products, quantities, alpha);
+  }
+
+  public void registerSimpleProduct(String productId) {
+    _warehouse.registerSimpleProduct(productId);
+  }
 }
