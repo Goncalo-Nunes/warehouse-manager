@@ -84,6 +84,7 @@ public abstract class Product implements ObservableProduct {
 	 */
     abstract void checkQuantity(int quantity, Partner partner);
 
+    abstract int getN();
 
     /**
      * Adds a new batch
@@ -100,7 +101,7 @@ public abstract class Product implements ObservableProduct {
             _maxPrice = price;
         } else if (price < _minPrice) {
             _minPrice = price;
-            
+
             if(_totalStock != 0) {
                 notifyObservers("BARGAIN");
             }

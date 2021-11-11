@@ -2,17 +2,23 @@ package ggc.core;
 
 public class AggregateProduct extends Product{
     
+    private final int N = 5;
     private Recipe _recipe;
+    
 
     AggregateProduct(String id) {
         super(id);
     }
 
-    public void setRecipe(Recipe recipe) {
+    int getN() {
+        return N;
+    }
+
+    void setRecipe(Recipe recipe) {
         _recipe = recipe;
     }
 
-    public Recipe getRecipe() {
+    Recipe getRecipe() {
         return _recipe;
     }
 

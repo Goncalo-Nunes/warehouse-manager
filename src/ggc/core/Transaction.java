@@ -7,6 +7,7 @@ import javax.swing.AbstractAction;
 public abstract class Transaction implements Serializable {
     private int _id;
     private Date _paymentDate;
+    private Date _warehouseDate;
     private double _baseValue;
     private int _quantity;
     private Product _product;
@@ -47,6 +48,21 @@ public abstract class Transaction implements Serializable {
         return _paymentDate;
     }
 
+    void setPaymentDate(Date date) {
+        _paymentDate = date;
+    }
+
+    Date  getCurrentDate() {
+        return _warehouseDate;
+    }
+
+    void setCurrentDate(Date date) {
+        _warehouseDate = date;
+    }
+
+    void setBaseValue(double price) {
+        _baseValue = price;
+    }
     
     public boolean isPaid() {
         return _isPaid;

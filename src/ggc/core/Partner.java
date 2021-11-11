@@ -13,9 +13,12 @@ public class Partner implements ProductObserver, Serializable {
     private String _name;
     private String _address;
     private String _id;
-    private String _status;
+    private PartnerState _status;
     private double _points;
     private NotificationDeliveryMode _deliveryMode;
+    private double _baseValues;
+    private double _totalSalesValue;
+    private double _acquisitionsValue;
     private List<Acquisition> _acquisitions = new ArrayList<Acquisition>();
     private List<Sale> _sales = new ArrayList<Sale>();
     private Set<Batch> _batches = new TreeSet<Batch>(new BatchComparator());
@@ -29,13 +32,24 @@ public class Partner implements ProductObserver, Serializable {
         _id = id;
         _name = name;
         _address = address;
-        _status = "NORMAL";
+        _status = new NormalPartner(this);
         _points = 0;
         _deliveryMode = mode;
+        _baseValues = 0;
+        _totalSalesValue = 0;
+        _acquisitionsValue = 0;
     }
 
     String getId() {
         return _id;
+    }
+
+    double getPoints() {
+        return _points;
+    }
+
+    void setPoints(double points) {
+        _points = points;
     }
 
     Collection<Batch> getBatches() {
@@ -56,6 +70,24 @@ public class Partner implements ProductObserver, Serializable {
         return Collections.unmodifiableList(_notificationsCopy);
     }
 
+    void addSale(Sale sale) {
+        _sales.add(sale);
+        _baseValues += sale.getBaseValue();
+    }
+
+    PartnerState getStatus() {
+        return _status;
+    }
+
+    void setStatus(PartnerState status) {
+        _status = status;
+    } 
+
+    void addAcquisition(Acquisition acquisition) {
+        _acquisitions.add(acquisition);
+        _acquisitionsValue += acquisition.getBaseValue();
+    }
+
     double calculateAcquisitionsValue() {
         Double total = 0d;
 
@@ -66,25 +98,9 @@ public class Partner implements ProductObserver, Serializable {
         return total;
     }
 
-    double calculateSalesValue() {
-        Double total = 0d;
-
-        for (Sale sale : _sales) {
-            total += sale.getAmountPaid();
-        }
-        return total;
-    }
-
-    double calculateSalesPayedValue() {
-        Double total = 0d;
-
-        for (Sale sale : _sales) {
-            if(sale.isPaid()) {
-                total += sale.getAmountPaid();
-            }
-        }
-
-        return total;
+    void paySale(SaleByCredit sale) {
+        _status.pay(sale);
+        _totalSalesValue += sale.getTotalValue();
     }
 
     public void update(String type, Product product) {
@@ -113,6 +129,6 @@ public class Partner implements ProductObserver, Serializable {
 
     public String toString() {
         return _id + "|" + _name + "|" + _address + "|" +_status + "|" + Math.round(_points) + "|" 
-        + Math.round(calculateAcquisitionsValue()) + "|" + Math.round(calculateSalesValue()) + "|" + Math.round(calculateSalesPayedValue());
+        + Math.round(_acquisitionsValue) + "|" + Math.round(_baseValues) + "|" + Math.round(_totalSalesValue);
     }
 }

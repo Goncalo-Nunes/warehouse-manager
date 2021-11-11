@@ -50,6 +50,10 @@ public class Warehouse implements Serializable {
         }
 
         _date.add(offset);
+
+        for(Transaction transaction : _transactions.values()) {
+            transaction.setCurrentDate(_date);
+        }
     }
 
     Collection<Product> getProducts() {
@@ -217,8 +221,11 @@ public class Warehouse implements Serializable {
     }
 
     void registerAcquisitionTransaction(Partner partner, Product product, double price, int quantity) {
-        _transactions.put(_nextTransactionId, new Acquisition(product, quantity, partner));
+        Acquisition acquisition = new Acquisition(product, quantity, partner, price);
+    
+        _transactions.put(_nextTransactionId, acquisition);
 
+        partner.addAcquisition(acquisition);
         product.addBatch(price, quantity, partner);
 
         _nextTransactionId++;

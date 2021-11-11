@@ -5,6 +5,11 @@ public class Acquisition extends Transaction {
         super(product, quantity, partner);
     }
 
+    Acquisition(Product product, int quantity, Partner partner, double price) {
+        super(product, quantity, partner);
+        setBaseValue(price);
+    }
+
     public String toString() {
         Partner partner = getPartner();
         Product product = getProduct();
