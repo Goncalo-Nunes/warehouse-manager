@@ -100,7 +100,10 @@ public abstract class Product implements ObservableProduct {
             _maxPrice = price;
         } else if (price < _minPrice) {
             _minPrice = price;
-            notifyObservers("BARGAIN");
+            
+            if(_totalStock != 0) {
+                notifyObservers("BARGAIN");
+            }
         }
 
         _batches.add(new Batch(price, quantity, partner, this));
