@@ -11,6 +11,9 @@ public class BreakdownSale extends Sale {
         super(product, quantity, partner);
     }
 
+    @Override
+    void pay() {}
+
     public String toString() {
         Partner partner = getPartner();
         AggregateProduct product = (AggregateProduct)getProduct();

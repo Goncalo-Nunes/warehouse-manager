@@ -63,6 +63,8 @@ public abstract class Transaction implements Serializable {
     void setBaseValue(double price) {
         _baseValue = price;
     }
+
+    abstract void pay();
     
     public boolean isPaid() {
         return _isPaid;

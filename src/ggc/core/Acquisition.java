@@ -10,6 +10,9 @@ public class Acquisition extends Transaction {
         setBaseValue(price);
     }
 
+    @Override
+    void pay() {}
+
     public String toString() {
         Partner partner = getPartner();
         Product product = getProduct();

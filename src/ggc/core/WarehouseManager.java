@@ -186,4 +186,9 @@ public class WarehouseManager {
   public void registerSimpleProduct(String productId) {
     _warehouse.registerSimpleProduct(productId);
   }
+
+  public void pay(int transactionId) throws UnknownTransactionException {
+    Transaction transaction = _warehouse.getTransactionWithId(transactionId);
+    _warehouse.pay(transaction);
+  }
 }

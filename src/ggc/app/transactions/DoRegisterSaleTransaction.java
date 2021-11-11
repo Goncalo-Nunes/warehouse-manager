@@ -2,12 +2,11 @@ package ggc.app.transactions;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+import ggc.app.exception.UnknownTransactionKeyException;
 import ggc.core.WarehouseManager;
-//FIXME import classes
+import ggc.core.exception.UnknownTransactionException;
 
-/**
- * 
- */
+
 public class DoRegisterSaleTransaction extends Command<WarehouseManager> {
 
   public DoRegisterSaleTransaction(WarehouseManager receiver) {

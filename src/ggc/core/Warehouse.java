@@ -232,5 +232,13 @@ public class Warehouse implements Serializable {
         _availableBalance -= price;
     }
 
+    void pay(Transaction transaction) {
+        if (transaction.isPaid()) {
+            return;
+        }
+
+        transaction.pay();
+    }
+
 
 }
