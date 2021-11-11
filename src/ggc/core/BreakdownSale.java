@@ -18,15 +18,10 @@ public class BreakdownSale extends Sale {
         Partner partner = getPartner();
         AggregateProduct product = (AggregateProduct)getProduct();
         Recipe recipe = product.getRecipe();
-        double baseValue = getBaseValue();
-        double payed = 0;
 
-        if(baseValue > 0) {
-            payed = baseValue;
-        }
 
         return "DESAGREGAÇÂO" + "|" + getId() + "|" + partner.getId() + 
-        "|" + product.getId() + "|" + getQuantity() + "|" + baseValue
-        + "|" + payed + "|" + getPaymentDate() + "|" + recipe.toString();
+        "|" + product.getId() + "|" + getQuantity() + "|" + getBaseValue()
+        + "|" + getAmountPaid() + "|" + getPaymentDate() + "|" + recipe;
     }
 }
