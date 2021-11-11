@@ -78,4 +78,9 @@ public class Batch implements Serializable {
     int getQuantity() {
         return _quantity;
     }
+
+    void removeQuantity(int quantity) {
+        _quantity -= quantity;
+        _product.removeStock(quantity);
+    }
 }

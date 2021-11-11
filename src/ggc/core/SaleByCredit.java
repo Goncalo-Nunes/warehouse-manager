@@ -18,6 +18,7 @@ public class SaleByCredit extends Sale {
     }
 
     int getLimitDateGap() {
+        //FIXME pode estar ao contrário
         return _deadline.difference(getCurrentDate());
     }
 

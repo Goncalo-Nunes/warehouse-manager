@@ -68,6 +68,9 @@ public abstract class Product implements ObservableProduct {
         return _batches;
     }
 
+    int getTotalStock() {
+        return _totalStock;
+    }
 
     /**
 	 * @see java.lang.Object#toString()
@@ -107,8 +110,46 @@ public abstract class Product implements ObservableProduct {
             }
         }
 
-        _batches.add(new Batch(price, quantity, partner, this));
+        Batch batch = new Batch(price, quantity, partner, this);
+        partner.addBatch(batch);
+        _batches.add(batch);
         addStock(quantity);
+    }
+
+    void calculateMinPrice() {
+        Double min = Double.MAX_VALUE;
+
+        for(Batch batch : _batches) {
+            if(batch.getPrice() < min) {
+                min = batch.getPrice();
+            }
+        }
+
+        _minPrice = min;
+    }
+
+    void calculateMaxPrice() {
+        Double max = Double.MIN_VALUE;
+
+        for(Batch batch : _batches) {
+            if(batch.getPrice() > max) {
+                max = batch.getPrice();
+            }
+        }
+
+        _maxPrice = max;
+    }
+
+    void removeBatch(Batch batch) {
+        _batches.remove(batch);
+        batch.getPartner().removeBatch(batch);
+        removeStock(batch.getQuantity());
+
+        if (batch.getPrice() == _minPrice) {
+            calculateMinPrice();
+        } else if (batch.getPrice() == _maxPrice) {
+            calculateMaxPrice();
+        }
     }
 
     void addStock(int quantity) {

@@ -16,6 +16,7 @@ import ggc.core.exception.DuplicatePartnerException;
 import ggc.core.exception.ImportFileException;
 import ggc.core.exception.InvalidDaysException;
 import ggc.core.exception.UnavailableFileException;
+import ggc.core.exception.UnavailableProductQuantityException;
 import ggc.core.exception.UnknownPartnerException;
 import ggc.core.exception.UnknownProductException;
 import ggc.core.exception.UnknownTransactionException;
@@ -191,4 +192,22 @@ public class WarehouseManager {
     Transaction transaction = _warehouse.getTransactionWithId(transactionId);
     _warehouse.pay(transaction);
   }
+
+  /*
+  public double getAvailableBalance() {
+    return _warehouse.getAvailableBalance();
+  }
+
+  public double getAccountingBalance() {
+    return _warehouse.getAccountingBalance();
+  }
+  */
+
+  public void registerSaleTransaction(String partnerId, String productId, int deadline, int amount) throws UnknownPartnerException, UnknownProductException, UnavailableProductQuantityException {
+    Partner partner = _warehouse.getPartnerWithId(partnerId);
+    Product product = _warehouse.getProductWithId(productId);
+
+    _warehouse.registerSaleTransaction(partner, product, deadline, amount);
+  }
+
 }

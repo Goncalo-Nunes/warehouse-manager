@@ -56,6 +56,14 @@ public class Partner implements ProductObserver, Serializable {
         return _batches;
     }
 
+    void addBatch(Batch batch) {
+        _batches.add(batch);
+    }
+
+    void removeBatch(Batch batch) {
+        _batches.remove(batch);
+    }
+
     Collection<Acquisition> getAcquisitions() {
         return _acquisitions;
     }

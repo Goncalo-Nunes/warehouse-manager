@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerException;
 import ggc.core.exception.InvalidDaysException;
+import ggc.core.exception.UnavailableProductQuantityException;
 import ggc.core.exception.UnknownPartnerException;
 import ggc.core.exception.UnknownProductException;
 import ggc.core.exception.UnknownTransactionException;
@@ -29,7 +31,7 @@ public class Warehouse implements Serializable {
 
     private Date _date;
     private int _nextTransactionId;
-    private int _availableBalance;
+    private double _availableBalance;
     private Map<String, Product> _products = new TreeMap<String, Product>(String.CASE_INSENSITIVE_ORDER);
     private Map<String, Partner> _partners = new TreeMap<String, Partner>(String.CASE_INSENSITIVE_ORDER);
     private Map<Integer, Transaction> _transactions = new TreeMap<Integer, Transaction>();
@@ -216,13 +218,13 @@ public class Warehouse implements Serializable {
     }
 
     void registerBreakdownTransaction(Product product, int quantity, Partner partner) throws UnknownPartnerException {
-        //FIXME check quantidade com stock, check if derivado
+        
         
     }
 
     void registerAcquisitionTransaction(Partner partner, Product product, double price, int quantity) {
         Acquisition acquisition = new Acquisition(product, quantity, partner, price);
-    
+        acquisition.setPaymentDate(_date);
         _transactions.put(_nextTransactionId, acquisition);
 
         partner.addAcquisition(acquisition);
@@ -238,7 +240,48 @@ public class Warehouse implements Serializable {
         }
 
         transaction.pay();
+        _availableBalance += transaction.getAmountPaid();
     }
 
+    public void registerSaleTransaction(Partner partner, Product product, int deadline, int amount) throws UnavailableProductQuantityException {
+        SaleByCredit sale = new SaleByCredit(product, amount, partner, deadline);
 
+        if(amount > product.getTotalStock()) {
+            throw new UnavailableProductQuantityException(product.getId(), product.getTotalStock(), amount);
+        }
+
+        List<Batch> batches = new ArrayList<Batch>(product.getBatches());
+        batches.sort(new Comparator<Batch>() {
+            public int compare(Batch b1, Batch b2) {
+                return b1.getQuantity() - b2.getQuantity();
+            }
+        });
+
+        int price = 0;
+        for(Batch batch : batches) {
+            if(batch.getQuantity() > amount) {
+                price += amount * batch.getPrice();
+                batch.removeQuantity(amount);
+                break;
+            } else {
+                price += batch.getQuantity() * batch.getPrice();
+                product.removeBatch(batch);
+                amount -= batch.getQuantity();
+            }
+        }
+
+        sale.setBaseValue(price);
+        _transactions.put(_nextTransactionId, sale);
+        _nextTransactionId++;
+        partner.addSale(sale);
+    }
+
+  /*  double getAvailableBalance() {
+        
+    }
+
+    double getAccountingBalance() {
+        
+    }
+    */
 }
