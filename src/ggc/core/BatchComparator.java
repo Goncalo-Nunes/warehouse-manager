@@ -1,8 +1,9 @@
 package ggc.core;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class BatchComparator implements Comparator<Batch> {
+public class BatchComparator implements Comparator<Batch>, Serializable {
     public int compare(Batch b1, Batch b2) {
         int diff = b1.getProduct().getId().compareToIgnoreCase(b2.getProduct().getId());
         if (diff != 0) {

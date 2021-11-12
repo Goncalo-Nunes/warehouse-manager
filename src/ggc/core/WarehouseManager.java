@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import ggc.app.exception.UnavailableProductException;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerException;
 import ggc.core.exception.ImportFileException;
@@ -112,8 +113,10 @@ public class WarehouseManager {
   }
 
 
-  public void registerBreakdownTransaction(Product product, int quantity, Partner partner) throws UnknownPartnerException {
-    _warehouse.registerBreakdownTransaction(product, quantity, partner);
+  public void registerBreakdownTransaction(String partnerId, String productId, int amount) throws UnknownPartnerException, UnknownProductException, UnavailableProductQuantityException {
+    Partner partner = _warehouse.getPartnerWithId(partnerId);
+    Product product = _warehouse.getProductWithId(productId);
+    _warehouse.registerBreakdownTransaction(partner, product, amount);
   }
 
 
@@ -193,7 +196,6 @@ public class WarehouseManager {
     _warehouse.pay(transaction);
   }
 
-  
   public double getAvailableBalance() {
     return _warehouse.getAvailableBalance();
   }

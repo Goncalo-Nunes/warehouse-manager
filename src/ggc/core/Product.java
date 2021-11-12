@@ -19,6 +19,8 @@ public abstract class Product implements ObservableProduct {
     /** Product's max price. */
     private double _maxPrice;
 
+    private double _allTimeHigh;
+
     /** Product's max price. */
     private double _minPrice;
 
@@ -42,6 +44,7 @@ public abstract class Product implements ObservableProduct {
      */
     Product(String id) {
         _maxPrice = 0;
+        _allTimeHigh = 0;
         _minPrice = 0;
         _totalStock = 0;
         _id = id;
@@ -79,13 +82,13 @@ public abstract class Product implements ObservableProduct {
         return "" + _id + "|" + Math.round(_maxPrice) + "|" + _totalStock;
     }
 
-    /**
-	 * @param quantity
-     *      quantity to check if available
-     * @param partner
-     *      partner to check
-	 */
-    abstract void checkQuantity(int quantity, Partner partner);
+    Recipe getRecipe() {
+        return null;
+    }
+
+    Double getMinPrice() {
+        return _minPrice;
+    }
 
     abstract int getN();
 
@@ -110,10 +113,18 @@ public abstract class Product implements ObservableProduct {
             }
         }
 
+        if(price > _allTimeHigh) {
+            _allTimeHigh = price;
+        }
+
         Batch batch = new Batch(price, quantity, partner, this);
         partner.addBatch(batch);
         _batches.add(batch);
         addStock(quantity);
+    }
+
+    double getAllTimeHigh() {
+        return _allTimeHigh;
     }
 
     void calculateMinPrice() {
@@ -163,6 +174,7 @@ public abstract class Product implements ObservableProduct {
     void removeStock(int quantity) {
         _totalStock -= quantity;
     }
+
 
     boolean observerExists(ProductObserver observer) {
         return _observers.contains(observer);

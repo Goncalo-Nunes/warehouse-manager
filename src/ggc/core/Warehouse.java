@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.io.IOException;
 
+import ggc.app.exception.UnavailableProductException;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerException;
 import ggc.core.exception.InvalidDaysException;
@@ -217,8 +219,43 @@ public class Warehouse implements Serializable {
         return Collections.unmodifiableList(payments);
     }
 
-    void registerBreakdownTransaction(Product product, int quantity, Partner partner) throws UnknownPartnerException {
-        
+    void registerBreakdownTransaction(Partner partner, Product product, int amount) throws UnavailableProductQuantityException {
+        if(amount > product.getTotalStock()) {
+            throw new UnavailableProductQuantityException(product.getId(), product.getTotalStock(), amount);
+        }
+
+        if(product.getRecipe() == null) {
+            return;
+        }
+
+        List<Batch> batches = new LinkedList<Batch>(product.getBatches());
+        batches.sort(new Comparator<Batch>() {
+            public int compare(Batch b1, Batch b2) {
+                return (int)(b1.getPrice() - b2.getPrice());
+            }
+        });
+
+        double price;
+        while(amount > 0) {
+            Batch batch = batches.get(0);
+            Recipe recipe = batch.getProduct().getRecipe();
+            for(Component component : recipe.getComponents()) {
+                if(component.getProduct().getBatches().size() == 0) {
+                    price = product.getAllTimeHigh();
+                } else {
+                    price = product.getMinPrice();
+                }
+                component.getProduct().addBatch(price, batch.getQuantity() * component.getQuantity(), partner);
+            }
+            if(batch.getQuantity() > amount) { 
+                batch.removeQuantity(amount);
+                amount = 0;
+            } else {
+                batches.remove(batch);
+                product.removeBatch(batch);
+                amount -= batch.getQuantity();
+            }
+        }
         
     }
 
@@ -253,7 +290,7 @@ public class Warehouse implements Serializable {
         List<Batch> batches = new ArrayList<Batch>(product.getBatches());
         batches.sort(new Comparator<Batch>() {
             public int compare(Batch b1, Batch b2) {
-                return b1.getQuantity() - b2.getQuantity();
+                return (int)(b1.getPrice() - b2.getPrice());
             }
         });
 

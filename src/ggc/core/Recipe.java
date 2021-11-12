@@ -19,6 +19,10 @@ public class Recipe implements Serializable {
         return _alpha;
     }
 
+    List<Component> getComponents() {
+        return _components;
+    }
+
     public String toString() {
         String ret = "";
 

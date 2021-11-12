@@ -11,6 +11,14 @@ public class Component implements Serializable {
         _product = product;
     }
 
+    int getQuantity() {
+        return _quantity;
+    }
+
+    Product getProduct() {
+        return _product;
+    }
+
     public String toString() {
         return _product.getId() + ":" + _quantity;
     }
