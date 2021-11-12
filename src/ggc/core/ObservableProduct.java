@@ -27,6 +27,6 @@ public interface ObservableProduct extends Serializable {
      *          Observable's new state (type).
      *          can be either NEW or BARGAIN.
      */
-    void notifyObservers(String type);
+    void notifyObservers(String type, double price);
 }
 

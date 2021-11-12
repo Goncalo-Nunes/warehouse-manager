@@ -22,6 +22,12 @@ public class Batch implements Serializable {
     /** Partner associated to the batch. */
     private Partner _partner;
 
+    Batch(double price, int quantity, Product product) {
+        _price = price;
+        _quantity = quantity;
+        _product = product;
+        
+    }
 
     /**
      * Create a batch.
@@ -36,9 +42,7 @@ public class Batch implements Serializable {
      *          batch's product.
      */
     Batch(double price, int quantity, Partner partner, Product product) {
-        _price = price;
-        _quantity = quantity;
-        _product = product;
+        this(price, quantity, product);
         _partner = partner;
     }
 

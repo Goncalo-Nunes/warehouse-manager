@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.TreeSet;
 
 
@@ -34,7 +36,7 @@ public abstract class Product implements ObservableProduct {
     private Set<Batch> _batches = new TreeSet<Batch>(new BatchComparator());
 
     /** Array containing observers who want to be notified about this product's events. */
-    private Set<ProductObserver> _observers = new HashSet<ProductObserver>();
+    private List<ProductObserver> _observers = new ArrayList<ProductObserver>();
 
     /**
      * Create a product.
@@ -43,9 +45,9 @@ public abstract class Product implements ObservableProduct {
      *          product ID.
      */
     Product(String id) {
-        _maxPrice = 0;
+        _maxPrice = Double.MIN_VALUE;;
         _allTimeHigh = 0;
-        _minPrice = 0;
+        _minPrice = Double.MAX_VALUE;
         _totalStock = 0;
         _id = id;
     }
@@ -61,6 +63,7 @@ public abstract class Product implements ObservableProduct {
      * @return the product's price.
      */
     double getPrice() {
+        calculateMaxPrice();
         return _maxPrice;
     }
 
@@ -79,7 +82,7 @@ public abstract class Product implements ObservableProduct {
 	 * @see java.lang.Object#toString()
 	 */
     public String toString() {
-        return "" + _id + "|" + Math.round(_maxPrice) + "|" + _totalStock;
+        return "" + _id + "|" + Math.round(_allTimeHigh) + "|" + _totalStock;
     }
 
     Recipe getRecipe() {
@@ -87,6 +90,7 @@ public abstract class Product implements ObservableProduct {
     }
 
     Double getMinPrice() {
+        calculateMinPrice();
         return _minPrice;
     }
 
@@ -103,24 +107,24 @@ public abstract class Product implements ObservableProduct {
      *          partner associated with the batch
      */
     void addBatch(double price, int quantity, Partner partner) {
-        if(price > _maxPrice) {
+        if(price > getPrice()) {
             _maxPrice = price;
-        } else if (price < _minPrice) {
-            _minPrice = price;
+        } else if (price < getMinPrice()) {
 
             if(_totalStock != 0) {
-                notifyObservers("BARGAIN");
+                notifyObservers("BARGAIN", price);
             }
-        }
-
-        if(price > _allTimeHigh) {
-            _allTimeHigh = price;
+            _minPrice = price;
         }
 
         Batch batch = new Batch(price, quantity, partner, this);
         partner.addBatch(batch);
         _batches.add(batch);
-        addStock(quantity);
+        addStock(quantity, batch);
+
+        if(price > _allTimeHigh) {
+            _allTimeHigh = price;
+        }
     }
 
     double getAllTimeHigh() {
@@ -160,12 +164,12 @@ public abstract class Product implements ObservableProduct {
             calculateMinPrice();
         } else if (batch.getPrice() == _maxPrice) {
             calculateMaxPrice();
-        }
+        } 
     }
 
-    void addStock(int quantity) {
-        if(_totalStock == 0 && quantity > 0) {
-            notifyObservers("NEW");
+    void addStock(int quantity, Batch batch) {
+        if(_totalStock == 0 && quantity > 0 && batch.getProduct().getAllTimeHigh() != 0) {
+            notifyObservers("NEW", batch.getPrice());
         }
 
         _totalStock += quantity;
@@ -191,9 +195,9 @@ public abstract class Product implements ObservableProduct {
     }
 
     @Override
-    public void notifyObservers(String type) {
+    public void notifyObservers(String type, double price) {
         for (ProductObserver observer : _observers) {
-            observer.update(type, this);
+            observer.update(type, this, price);
         }
     }
     

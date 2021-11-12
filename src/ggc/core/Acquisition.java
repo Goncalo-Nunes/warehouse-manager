@@ -1,13 +1,14 @@
 package ggc.core;
 
 public class Acquisition extends Transaction {
-    Acquisition(Product product, int quantity, Partner partner) {
-        super(product, quantity, partner);
+    Acquisition(int id, Product product, int quantity, Partner partner) {
+        super(id, product, quantity, partner);
+        setPaid(true);
     }
 
-    Acquisition(Product product, int quantity, Partner partner, double price) {
-        super(product, quantity, partner);
-        setBaseValue(price);
+    Acquisition(int id, Product product, int quantity, Partner partner, double price) {
+        super(id, product, quantity, partner);
+        setBaseValue(price * quantity);
     }
 
     @Override
@@ -20,7 +21,7 @@ public class Acquisition extends Transaction {
     public String toString() {
         Partner partner = getPartner();
         Product product = getProduct();
-        return "COMPRA|" + getId() + "|" + partner.getId() + "|" + product.getId()
-         + "|" + getBaseValue() + "|" + getPaymentDate();
+        return "COMPRA|" + getId() + "|" + partner.getId() + "|" + product.getId() + "|" + getQuantity()
+         + "|" + Math.round(getBaseValue()) + "|" + getPaymentDate();
     }
 }

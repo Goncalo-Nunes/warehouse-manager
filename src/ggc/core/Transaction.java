@@ -14,7 +14,8 @@ public abstract class Transaction implements Serializable {
     private Partner _partner;
     private boolean _isPaid;
 
-    Transaction(Product product, int quantity, Partner partner) {
+    Transaction(int id, Product product, int quantity, Partner partner) {
+        _id = id;
         _product = product;
         _quantity = quantity;
         _partner = partner;
@@ -64,12 +65,17 @@ public abstract class Transaction implements Serializable {
         _baseValue = price;
     }
 
+
     abstract void pay();
 
     abstract double getTotalValue();
     
-    public boolean isPaid() {
+    boolean isPaid() {
         return _isPaid;
+    }
+
+    void setPaid(boolean isPaid) {
+        _isPaid = isPaid;
     }
     
 }

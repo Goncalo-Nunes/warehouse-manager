@@ -2,7 +2,7 @@ package ggc.core;
 
 public class SelectionPartner extends PartnerState {
     /** Serial number for serialization. */
-    private static final long serialVersionUID = 202012040059L;
+    private static final long serialVersionUID = 202109091821L;
     
 
     public SelectionPartner(Partner partner) {

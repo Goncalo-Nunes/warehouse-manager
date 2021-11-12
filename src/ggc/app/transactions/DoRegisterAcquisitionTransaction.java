@@ -22,8 +22,8 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
     super(Label.REGISTER_ACQUISITION_TRANSACTION, receiver);
     addStringField("partnerId", Message.requestPartnerKey());
     addStringField("productId", Message.requestProductKey());
-    addStringField("price", Message.requestPrice());
-    addStringField("quantity", Message.requestAmount());
+    addRealField("price", Message.requestPrice());
+    addIntegerField("quantity", Message.requestAmount());
   }
 
   @Override
@@ -36,9 +36,9 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
     if(!_receiver.productExists(productId)) {
       Form form = new Form();
       form.addBooleanField("addRecipe", Message.requestAddRecipe());
-      form.parse();
+      boolean addRecipe = form.parse().booleanField("addRecipe");
   
-      if(booleanField("addRecipe")) {
+      if(addRecipe) {
         int numberComponents = Form.requestInteger(Message.requestNumberOfComponents());
         double alpha = Form.requestInteger(Message.requestAlpha());
         List<String> productIds = new ArrayList<String>(); 

@@ -3,7 +3,6 @@ package ggc.app.transactions;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.core.WarehouseManager;
-import ggc.core.Transaction;
 import ggc.app.exception.UnavailableProductException;
 import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.app.exception.UnknownProductKeyException;
@@ -11,7 +10,7 @@ import ggc.core.exception.UnavailableProductQuantityException;
 import ggc.core.exception.UnknownPartnerException;
 import ggc.core.exception.UnknownProductException;
 
-//FIXME import classes
+
 
 /**
  * Register order.

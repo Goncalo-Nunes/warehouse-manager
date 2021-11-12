@@ -154,10 +154,10 @@ public class Warehouse implements Serializable {
     }
 
     List<Batch> getBatchesUnderGivenPrice(int price) {
-        List<Batch> lookup = new ArrayList<>();
+        List<Batch> lookup = new ArrayList<Batch>();
         for(Product product : getProducts()) {
           for(Batch batch : product.getBatches()) {
-            if (price < batch.getPrice())
+            if (price > batch.getPrice())
                 lookup.add(batch);
           }
         }
@@ -220,14 +220,24 @@ public class Warehouse implements Serializable {
     }
 
     void registerBreakdownTransaction(Partner partner, Product product, int amount) throws UnavailableProductQuantityException {
-        if(amount > product.getTotalStock()) {
-            throw new UnavailableProductQuantityException(product.getId(), product.getTotalStock(), amount);
+
+        if(product.getRecipe() != null) {
+            for(Component component : product.getRecipe().getComponents()) {
+                if(component.getProduct().getTotalStock() < amount) {
+                    throw new UnavailableProductQuantityException(component.getProduct().getId(), amount, component.getProduct().getTotalStock());
+                }
+            }
         }
 
+        if(amount > product.getTotalStock()) {
+            throw new UnavailableProductQuantityException(product.getId(), amount, product.getTotalStock());
+        }
+        
         if(product.getRecipe() == null) {
             return;
         }
 
+        int copyAmount = amount;
         List<Batch> batches = new LinkedList<Batch>(product.getBatches());
         batches.sort(new Comparator<Batch>() {
             public int compare(Batch b1, Batch b2) {
@@ -236,39 +246,68 @@ public class Warehouse implements Serializable {
         });
 
         double price;
+        double acquisitions = 0;
+        double sales = 0;
+        List<Batch> newBatches = new ArrayList<Batch>();
         while(amount > 0) {
             Batch batch = batches.get(0);
             Recipe recipe = batch.getProduct().getRecipe();
-            for(Component component : recipe.getComponents()) {
-                if(component.getProduct().getBatches().size() == 0) {
-                    price = product.getAllTimeHigh();
-                } else {
-                    price = product.getMinPrice();
-                }
-                component.getProduct().addBatch(price, batch.getQuantity() * component.getQuantity(), partner);
-            }
             if(batch.getQuantity() > amount) { 
+                for(Component component : recipe.getComponents()) {
+                    if(component.getProduct().getBatches().size() == 0) {
+                        price = component.getProduct().getAllTimeHigh();
+                    } else {
+                        price = component.getProduct().getMinPrice();
+                    }
+
+                    acquisitions += price * amount * component.getQuantity();
+                    component.getProduct().addBatch(price, amount * component.getQuantity(), partner);
+                    newBatches.add(new Batch(price * amount * component.getQuantity(), component.getQuantity() * amount, component.getProduct()));
+                }
+                sales += batch.getPrice() * amount;
                 batch.removeQuantity(amount);
                 amount = 0;
             } else {
+                for(Component component : recipe.getComponents()) {
+                    if(component.getProduct().getBatches().size() == 0) {
+                        price = component.getProduct().getAllTimeHigh();
+                    } else {
+                        price = component.getProduct().getMinPrice();
+                    }
+                    acquisitions += price * batch.getQuantity() * component.getQuantity();
+                    component.getProduct().addBatch(price, batch.getQuantity() * component.getQuantity(), partner);
+                    newBatches.add(new Batch(price * batch.getQuantity() * component.getQuantity(), component.getQuantity() * batch.getQuantity(), component.getProduct()));
+                }
                 batches.remove(batch);
                 product.removeBatch(batch);
+                sales += batch.getPrice() * batch.getQuantity();
                 amount -= batch.getQuantity();
             }
         }
-        
+
+        double baseValue = sales - acquisitions;
+        BreakdownSale transaction = new BreakdownSale(_nextTransactionId, product, copyAmount, partner);
+        transaction.setBatches(newBatches);
+        transaction.setBaseValue(baseValue);
+        transaction.setCurrentDate(new Date(_date.getDays()));
+        transaction.setPaymentDate(new Date(_date.getDays()));
+        _transactions.put(_nextTransactionId, transaction);
+        partner.addSale(transaction);
+        _nextTransactionId++;
+        _availableBalance += transaction.getAmountPaid();
     }
 
     void registerAcquisitionTransaction(Partner partner, Product product, double price, int quantity) {
-        Acquisition acquisition = new Acquisition(product, quantity, partner, price);
-        acquisition.setPaymentDate(_date);
+        Acquisition acquisition = new Acquisition(_nextTransactionId, product, quantity, partner, price);
+        acquisition.setCurrentDate(new Date(_date.getDays()));
+        acquisition.setPaymentDate(new Date(_date.getDays()));
         _transactions.put(_nextTransactionId, acquisition);
 
         partner.addAcquisition(acquisition);
         product.addBatch(price, quantity, partner);
 
         _nextTransactionId++;
-        _availableBalance -= price;
+        _availableBalance -= price * quantity;
     }
 
     void pay(Transaction transaction) {
@@ -281,10 +320,10 @@ public class Warehouse implements Serializable {
     }
 
     public void registerSaleTransaction(Partner partner, Product product, int deadline, int amount) throws UnavailableProductQuantityException {
-        SaleByCredit sale = new SaleByCredit(product, amount, partner, deadline);
+        SaleByCredit sale = new SaleByCredit(_nextTransactionId, product, amount, partner, deadline);
 
         if(amount > product.getTotalStock()) {
-            throw new UnavailableProductQuantityException(product.getId(), product.getTotalStock(), amount);
+            throw new UnavailableProductQuantityException(product.getId(), amount, product.getTotalStock());
         }
 
         List<Batch> batches = new ArrayList<Batch>(product.getBatches());
@@ -307,6 +346,7 @@ public class Warehouse implements Serializable {
             }
         }
 
+        sale.setCurrentDate(new Date(_date.getDays()));
         sale.setBaseValue(price);
         _transactions.put(_nextTransactionId, sale);
         _nextTransactionId++;

@@ -111,8 +111,8 @@ public class Partner implements ProductObserver, Serializable {
         _totalSalesValue += sale.getTotalValue();
     }
 
-    public void update(String type, Product product) {
-        _notifications.add(_deliveryMode.deliverNotification(type, product));
+    public void update(String type, Product product, double price) {
+        _notifications.add(_deliveryMode.deliverNotification(type, product, price));
     }
 
     @Override

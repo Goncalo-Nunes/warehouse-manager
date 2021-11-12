@@ -4,8 +4,8 @@ public class SaleByCredit extends Sale {
     private Date _deadline;
     private double _amountPaid;
 
-    SaleByCredit(Product product, int quantity, Partner partner, int deadline) {
-        super(product, quantity, partner);
+    SaleByCredit(int id, Product product, int quantity, Partner partner, int deadline) {
+        super(id, product, quantity, partner);
         _deadline = new Date(deadline);
     }
 
@@ -18,7 +18,6 @@ public class SaleByCredit extends Sale {
     }
 
     int getLimitDateGap() {
-        //FIXME pode estar ao contrário
         return _deadline.difference(getCurrentDate());
     }
 
@@ -48,16 +47,17 @@ public class SaleByCredit extends Sale {
 
     void pay() {
         _amountPaid = getTotalValue();
-        setPaymentDate(getCurrentDate());
+        setPaymentDate(new Date(getCurrentDate().getDays()));
         getPartner().paySale(this);
+        setPaid(true);
     }
 
 
     public String toString() {
         Partner partner = getPartner();
         Product product = getProduct();
-        String ret =  "VENDA|" + "|" + getId() + "|" + partner.getId() + "|" + product.getId()
-        + "|" + getQuantity() + "|" + getBaseValue() + "|" + Math.round(_amountPaid) + "|" + _deadline;
+        String ret =  "VENDA" + "|" + getId() + "|" + partner.getId() + "|" + product.getId()
+        + "|" + getQuantity() + "|" + Math.round(getBaseValue()) + "|" + Math.round(getTotalValue()) + "|" + _deadline;
 
         if(isPaid()) {
             ret += "|" + getPaymentDate();

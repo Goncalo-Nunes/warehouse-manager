@@ -1,15 +1,8 @@
 package ggc.core;
 
 public interface ProductObserver {
-    /**
-     * Adds a notification to array of Client notifications.
-     * 
-     * @param type
-     *          notification type.
-     * @param product
-     *          product
-     */
-    void update(String type, Product product);
+
+    void update(String type, Product product, double price);
 
     int hashCode();
 

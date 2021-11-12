@@ -1,7 +1,7 @@
 package ggc.core;
 
 public class NormalPartner extends PartnerState {
-    private static final long serialVersionUID = 202012040059L;
+    private static final long serialVersionUID = 202109091821L;
     
 
     public NormalPartner(Partner partner) {
