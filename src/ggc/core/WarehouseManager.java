@@ -193,7 +193,7 @@ public class WarehouseManager {
     _warehouse.pay(transaction);
   }
 
-  /*
+  
   public double getAvailableBalance() {
     return _warehouse.getAvailableBalance();
   }
@@ -201,7 +201,7 @@ public class WarehouseManager {
   public double getAccountingBalance() {
     return _warehouse.getAccountingBalance();
   }
-  */
+  
 
   public void registerSaleTransaction(String partnerId, String productId, int deadline, int amount) throws UnknownPartnerException, UnknownProductException, UnavailableProductQuantityException {
     Partner partner = _warehouse.getPartnerWithId(partnerId);
