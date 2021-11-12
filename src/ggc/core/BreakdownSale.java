@@ -14,6 +14,10 @@ public class BreakdownSale extends Sale {
     @Override
     void pay() {}
 
+    double getTotalValue() {
+        return 0;
+    }
+
     public String toString() {
         Partner partner = getPartner();
         AggregateProduct product = (AggregateProduct)getProduct();

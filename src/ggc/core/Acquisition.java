@@ -13,6 +13,10 @@ public class Acquisition extends Transaction {
     @Override
     void pay() {}
 
+    double getTotalValue() {
+        return 0;
+    }
+
     public String toString() {
         Partner partner = getPartner();
         Product product = getProduct();

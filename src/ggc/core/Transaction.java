@@ -65,6 +65,8 @@ public abstract class Transaction implements Serializable {
     }
 
     abstract void pay();
+
+    abstract double getTotalValue();
     
     public boolean isPaid() {
         return _isPaid;

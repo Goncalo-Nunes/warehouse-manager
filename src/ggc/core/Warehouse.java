@@ -276,12 +276,20 @@ public class Warehouse implements Serializable {
         partner.addSale(sale);
     }
 
-  /*  double getAvailableBalance() {
-        
+    double getAvailableBalance() {
+        return _availableBalance;
     }
 
     double getAccountingBalance() {
-        
+        double accountingBalance = _availableBalance;
+
+        for(Transaction transaction : _transactions.values()) {
+            if(!transaction.isPaid()) {
+                accountingBalance += transaction.getTotalValue();
+            }
+        }
+
+        return accountingBalance;
     }
-    */
+    
 }
